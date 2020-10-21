@@ -1,0 +1,183 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: "Create VPC with a public subnet and private subnet"
+Parameters:
+  VPCName:
+    Description: the name of the VPC
+    Type: String
+    Default: VPC-G16
+  PublicSubnetName:
+    Description: the public subnet
+    Type: String
+    Default: public_subnet_G16
+  PrivateSubnetName:
+    Description: the private subnet
+    Type: String
+    Default: private_subnet_G16
+  InternetGatewayName:
+    Description: InternetGateway name
+    Type: String
+    Default: igw_G16
+  PublicRouteTableName:
+    Description: public table name
+    Type: String
+    Default: public_rt_G16
+  PrivateRouteTableName:
+    Description: private table name
+    Type: String
+    Default: private_rt_G16
+
+Mappings:
+  SubnetConfig:
+    VPC:
+      CIDR: "10.0.0.0/16"
+    public:
+      CIDR: "10.0.1.0/24"
+    private:
+      CIDR: "10.0.2.0/24"
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock:
+      Fn::FindInMap:
+        - "SubnetConfig"
+        - "VPC"
+        - "CIDR"
+    Tags:
+      - Key: Name
+        Value: !Ref VPCName
+      - Key: Application
+        Value: !Ref "AWS::StackName"
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref InternetGatewayName
+        - Key: Applicationa
+          Value: !Ref "AWS::StackName"
+
+  InternetGatewayAttrachment:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  #public config
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPC
+      AvailabilityZone: !Select [0, !GetAzs { Ref: "AWS::Region" }]
+      CidrBlock:
+        Fn::FindInMap:
+          - "SubnetConfig"
+          - "public"
+          - "CIDR"
+      MapPublicOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Ref PublicSubnetName
+        - Key: Application
+          Value: !Ref "AWS::StackName"
+
+  PublicRouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Ref PublicRouteTableName
+        - Key: Application
+          Value: !Ref "AWS::StackName"
+
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId:
+        Ref: "InternetGateway"
+
+  PublicSubnetRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId:
+        Ref: "PublicSubnet"
+      RouteTableId:
+        Ref: "PublicRouteTable"
+
+  #private config
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPC
+      AvailabilityZone: !Select [0, !GetAzs { Ref: "AWS::Region" }]
+      CidrBlock:
+        Fn::FindInMap:
+          - "SubnetConfig"
+          - "private"
+          - "CIDR"
+      MapPublicOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Ref PrivateSubnetName
+        - Key: Application
+          Value: !Ref "AWS::StackName"
+
+  PrivateRouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Ref PrivateRouteTableName
+        - Key: Application
+          Value: !Ref "AWS::StackName"
+
+  PrivateSubnetRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId:
+        Ref: "PrivateSubnet"
+      RouteTableId:
+        Ref: "PrivateRouteTable"
+
+Output:
+  VPCId:
+    Description: "VPCid of VPC"
+    Value: !Ref VPC
+    Export:
+      Name: !Sub "${AWS::Region}-${AWS::StackName}-VPC"
+
+  PublicSubnet:
+    Description: "SubnetId of public subnet"
+    Value:
+      Ref: "PublicSubnet"
+    Export:
+      Name: !Sub "${AWS::Region}-${AWS::StackName}-PublicSubnet"
+
+  PrivateSubnet:
+    Description: "SubnetId of private subnet "
+    Value:
+      Ref: "PrivateSubnet"
+    Export:
+      Name: F!Sub "${AWS::Region}-${AWS::StackName}-PrivateSubnet"
+
+  InternetGateway:
+    Description: "InternetGateway id"
+    Value:
+      Ref: "PrivateSubnet"
+    Export:
+      Name: !Sub "${AWS::Region}-${AWS::StackName}-InternetGateway"
+
+  DefaultSecurityGroup:
+    Description: "DefaultSecurityGroup id"
+    Value: !GetAtt VPC.DefaultSecurityGroup
+    Export:
+      Name: !Sub "${AWS::Region}-${AWS::StackName}-DefaultSecurityGroup"

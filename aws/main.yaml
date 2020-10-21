@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: "Join all files yaml"
+
+Parameters:
+  VPCName:
+    Description: VPC Name.
+    Type: String 
+    Default: VPC-G16
+
+  BucketName:
+    Description:  Bucket name the templates
+    Type: String
+    Default: https://templates-pro2-g16.s3.us-east-2.amazonaws.com
+
+Resources:
+  VPC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        VPCName: !Ref VPCName
+      TemplateURL: !Sub ${BucketName}/vpc.yaml
+  
+  Config:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Parameters:
+        VPC: !GetAtt VPC.Outputs.VPCId
+        DefaultSecurityGroup: !GetAtt VPC.Outputs.DefaultSecurityGroup
+      TemplateURL: !Sub ${BucketName}/config.yaml
+
+  EC2:
+    Type: AWS::CloudFormation::Stack
+    Properties: 
+      Parameters:
+        PublicSubnet: !GetAtt VPC.Outputs.PublicSubnet
+        PrivateSubnet: !GetAtt VPC.Outputs.PrivateSubnet
+        SecurityGroup: !GetAtt Config.Outputs.SecurityGroup
+      TemplateURL: !Sub ${BucketName}/ec2.yaml
+
