@@ -112,11 +112,29 @@ Resources:
           Value: !Ref PublicRouteTableName
         - Key: Application
           Value: !Ref "AWS::StackName"
+  
+  PrivateRouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Ref PrivateRouteTableName
+        - Key: Application
+          Value: !Ref "AWS::StackName"
 
   DefaultPublicRoute:
     Type: AWS::EC2::Route
     Properties:
       RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId:
+        Ref: "InternetGateway"
+  
+  DefaultPublicRoutePriv:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
       DestinationCidrBlock: "0.0.0.0/0"
       GatewayId:
         Ref: "InternetGateway"
@@ -128,18 +146,7 @@ Resources:
         Ref: "PublicSubnet"
       RouteTableId:
         Ref: "PublicRouteTable"
-
-  #private config
-  PrivateRouteTable:
-    Type: "AWS::EC2::RouteTable"
-    Properties:
-      VpcId: !Ref VPC
-      Tags:
-        - Key: Name
-          Value: !Ref PrivateRouteTableName
-        - Key: Application
-          Value: !Ref "AWS::StackName"
-
+  
   PrivateSubnetRouteTableAssociation:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
     Properties:
