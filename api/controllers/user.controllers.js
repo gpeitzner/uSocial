@@ -13,7 +13,9 @@ user.createUser = async (req, res) => {
     const newUser = new userSchema({
         name: req.body.name,
         user: req.body.user,
-        password: req.body.password
+        password: req.body.password,
+        image: req.body.image,
+        modeBot: false
     });
 
     await newUser.save();
