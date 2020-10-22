@@ -41,15 +41,15 @@ Resources:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock:
-      Fn::FindInMap:
-        - "SubnetConfig"
-        - "VPC"
-        - "CIDR"
-    Tags:
-      - Key: Name
-        Value: !Ref VPCName
-      - Key: Application
-        Value: !Ref "AWS::StackName"
+        Fn::FindInMap:
+          - "SubnetConfig"
+          - "VPC"
+          - "CIDR"
+      Tags:
+        - Key: Name
+          Value: !Ref VPCName
+        - Key: Application
+          Value: !Ref "AWS::StackName"
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
@@ -57,7 +57,7 @@ Resources:
       Tags:
         - Key: Name
           Value: !Ref InternetGatewayName
-        - Key: Applicationa
+        - Key: Application
           Value: !Ref "AWS::StackName"
 
   InternetGatewayAttrachment:
@@ -72,16 +72,34 @@ Resources:
     Properties:
       VpcId:
         Ref: VPC
-      AvailabilityZone: !Select [0, !GetAzs { Ref: "AWS::Region" }]
+      AvailabilityZone: !Select [0, !GetAZs { Ref: "AWS::Region" }]
       CidrBlock:
         Fn::FindInMap:
           - "SubnetConfig"
           - "public"
           - "CIDR"
-      MapPublicOnLaunch: true
+      MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
           Value: !Ref PublicSubnetName
+        - Key: Application
+          Value: !Ref "AWS::StackName"
+
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPC
+      AvailabilityZone: !Select [0, !GetAZs { Ref: "AWS::Region" }]
+      CidrBlock:
+        Fn::FindInMap:
+          - "SubnetConfig"
+          - "private"
+          - "CIDR"
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Ref PrivateSubnetName
         - Key: Application
           Value: !Ref "AWS::StackName"
 
@@ -112,24 +130,6 @@ Resources:
         Ref: "PublicRouteTable"
 
   #private config
-  PrivateSubnet:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId:
-        Ref: VPC
-      AvailabilityZone: !Select [0, !GetAzs { Ref: "AWS::Region" }]
-      CidrBlock:
-        Fn::FindInMap:
-          - "SubnetConfig"
-          - "private"
-          - "CIDR"
-      MapPublicOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: !Ref PrivateSubnetName
-        - Key: Application
-          Value: !Ref "AWS::StackName"
-
   PrivateRouteTable:
     Type: "AWS::EC2::RouteTable"
     Properties:
@@ -148,7 +148,7 @@ Resources:
       RouteTableId:
         Ref: "PrivateRouteTable"
 
-Output:
+Outputs:
   VPCId:
     Description: "VPCid of VPC"
     Value: !Ref VPC
@@ -163,11 +163,11 @@ Output:
       Name: !Sub "${AWS::Region}-${AWS::StackName}-PublicSubnet"
 
   PrivateSubnet:
-    Description: "SubnetId of private subnet "
+    Description: "SubnetId of private subnet"
     Value:
       Ref: "PrivateSubnet"
     Export:
-      Name: F!Sub "${AWS::Region}-${AWS::StackName}-PrivateSubnet"
+      Name: !Sub "${AWS::Region}-${AWS::StackName}-PrivateSubnet"
 
   InternetGateway:
     Description: "InternetGateway id"

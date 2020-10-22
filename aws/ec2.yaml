@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
-Desciption: "create two EC2"
+Description: "create two EC2"
 Parameters:
   PublicSubnet:
     Description: Public Subnet
@@ -22,57 +22,53 @@ Parameters:
     Default: t2.micro  
     AllowedValues: [t2.micro]
     ConstraintDescription: must be a valid EC2 instance type.
-  WebSideAmiId:
+  WebsideAmiId:
     Type: String
-    Default: ami-00bcac5ae8c849ed7  #ubuntu 20.04
-  EC2WebSite1Name:
+    Default: ami-07efac79022b86107  #ubuntu 20.04
+  EC21Name:
     Type: String
     Default: ec2_1_pro2
-  EC2WebSite2Name:
+  EC22Name:
     Type: String
     Default: ec2_2_pro2
 
 Resources:
-  EC2InstanceWebSite1:
-    Type: AWS::EC2:.Instance
+  EC2Instance1:
+    Type: AWS::EC2::Instance
     Properties:
-      InstanceType: !Ref InstanceType
+      InstanceType: !Ref InstanceType      
+      #SecurityGroups: !Ref SecurityGroup
       KeyName: !Ref KeyName
-      ImageId: !Ref WebSideAmiId
+      ImageId: !Ref WebsideAmiId
       SubnetId: !Ref PublicSubnet
       Tags:
         - Key: Name
-          Value: !Ref EC2WebSite1Name
+          Value: !Ref EC21Name
         - Key: Application
           Value: !Ref "AWS::StackName"
 
-  EC2InstanceWebSite2:
-    Type: AWS::EC2:.Instance
+  EC2Instance2:
+    Type: AWS::EC2::Instance
     Properties:
       InstanceType: !Ref InstanceType
+      #SecurityGroups: !Ref SecurityGroup
       KeyName: !Ref KeyName
-      ImageId: !Ref WebSideAmiId
+      ImageId: !Ref WebsideAmiId
       SubnetId: !Ref PrivateSubnet
       Tags:
         - Key: Name
-          Value: !Ref EC2WebSite2Name
+          Value: !Ref EC22Name
         - Key: Application
           Value: !Ref "AWS::StackName"
 
 Outputs:
-  EC2WebSite1:
-    Description: EC2 WEBSITE
-    Value: !Ref EC2InstanceWebSite1
+  EC21:
+    Description: EC1
+    Value: !Ref EC2Instance1
     Export:
-      Name: !Sub "${AWS::Region}-${AWS::StackName}-EC2Web1"
-  EC2WebSite2:
-    Description: EC2 WEBSITE
-    Value: !Ref EC2InstanceWebSite2
+      Name: !Sub "${AWS::Region}-${AWS::StackName}-EC2Ins1"
+  EC22:
+    Description: EC2
+    Value: !Ref EC2Instance2
     Export:
-      Name: !Sub "${AWS::Region}-${AWS::StackName}-EC2Web2"
-
-
-
-
-
-  
+      Name: !Sub "${AWS::Region}-${AWS::StackName}-EC2Ins2"  

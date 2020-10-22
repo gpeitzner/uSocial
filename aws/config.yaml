@@ -25,29 +25,24 @@ Resources:
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Enable SSH access via port 22
+      GroupDescription: Enable SSH access via port 22, 80 and 3000
+      VpcId: !Ref VPC
       SecurityGroupIngress:
       - IpProtocol: tcp
         FromPort: 22
         ToPort: 22
         CidrIp: !Ref 'SSHLocation'
-      - IpProtocol: tcp
-        FromPort: 80
-        ToPort: 80
-        CidrIp: 0.0.0.0/0
-      - IpProtocol: tcp
-        FromPort: 3000
-        ToPort: 3000
-        CidrIp: 0.0.0.0/0
-    Tags:
-      - Key: Name
-        Value: !Ref SGName
-      - Key: Application
-        Value: !Ref "AWS::StackName"
+      Tags:
+        - Key: Name
+          Value: !Ref SGName
+        - Key: Application
+          Value: !Ref "AWS::StackName"
 
 Outputs:
+
   SecurityGroup:
     Description: Instance Security Group for EC2 Instances
-    Value: !Ref InstanceSecurityGroup
+    Value: 
+      Ref: InstanceSecurityGroup
     Export:
       Name: !Sub "${AWS::Region}-${AWS::StackName}-SecurityGroup"

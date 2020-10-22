@@ -20,21 +20,4 @@ Resources:
       Parameters:
         VPCName: !Ref VPCName
       TemplateURL: !Sub ${BucketName}/vpc.yaml
-  
-  Config:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      Parameters:
-        VPC: !GetAtt VPC.Outputs.VPCId
-        DefaultSecurityGroup: !GetAtt VPC.Outputs.DefaultSecurityGroup
-      TemplateURL: !Sub ${BucketName}/config.yaml
-
-  EC2:
-    Type: AWS::CloudFormation::Stack
-    Properties: 
-      Parameters:
-        PublicSubnet: !GetAtt VPC.Outputs.PublicSubnet
-        PrivateSubnet: !GetAtt VPC.Outputs.PrivateSubnet
-        SecurityGroup: !GetAtt Config.Outputs.SecurityGroup
-      TemplateURL: !Sub ${BucketName}/ec2.yaml
 
