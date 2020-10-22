@@ -6,5 +6,6 @@ const userSchema = new Schema({
     user: {type: String, required: true},
     password: {type: String, required: true}
 });
-
-module.exports = mongoose.model('usuario',userSchema);
+const collectionName = 'Usuario';      
+module.exports = mongoose.model('Usuario',userSchema, collectionName);          //the collection name mongoose convert a plural example: Usuario -> usuarios 
+                                                                                //that's why I force setting the name in singular by means of collectionName
