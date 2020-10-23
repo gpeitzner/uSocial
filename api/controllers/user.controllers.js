@@ -1,6 +1,14 @@
 const userSchema = require('../models/user');
+let aws = require('aws-sdk')
+const cognito = require('../config/cognito')
 
 const user = {};
+
+aws.config.update(cognito.aws_remote_config)
+const client = new aws.CognitoIdentityServiceProvider({
+    apiVersion: "2016-04-19",
+    region: "us-east-2"
+})
 
 //get user 
 user.getusers = async (req, res) => {
@@ -8,11 +16,11 @@ user.getusers = async (req, res) => {
     res.json(user);
 };
 
-user.getOneUser = async (req, res) =>{
-    try{
+user.getOneUser = async (req, res) => {
+    try {
         const user = await userSchema.findById(req.params._id);
         res.json(user)
-    }catch (e){
+    } catch (e) {
         res.status(403).send("Usuario no existe.")
     }
 }
@@ -28,6 +36,35 @@ user.createUser = async (req, res) => {
     });
 
     await newUser.save();
+
+    //CREATE USER IN COGNITO
+    console.log(req.body)
+    var poolData = {
+        UserPoolId: "us-east-2_BUSOUKHvw",
+        Username: req.body.name,
+        UserAttributes: [
+            {
+                Name: "name",
+                Value: req.body.name
+            },
+            {
+                Name: "nickname",
+                Value: req.body.user
+            },
+            {
+                Name: "custom:password",
+                Value: req.body.password
+            }
+        ]
+    };
+    client.adminCreateUser(poolData, (error, data) => {
+        if(error){
+            console.log(error);
+        }else{
+            console.log(data);      
+        }
+    });
+
     res.json({
         status: 'User created'
     })
