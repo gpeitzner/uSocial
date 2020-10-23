@@ -1,5 +1,11 @@
 const https = require("https");
 
+const headers = {
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+};
+
 function getData() {
   return new Promise((resolve, reject) => {
     https
@@ -32,6 +38,7 @@ exports.handler = async (event) => {
       );
       const response = {
         statusCode: 200,
+        headers: headers,
         body: daysInfo,
       };
       return response;
@@ -39,6 +46,7 @@ exports.handler = async (event) => {
       const dayInfo = countryData.filter((day) => day.date === start);
       const response = {
         statusCode: 200,
+        headers: headers,
         body: dayInfo,
       };
       return response;
@@ -46,6 +54,7 @@ exports.handler = async (event) => {
   } catch (error) {
     const response = {
       statusCode: 500,
+      headers: headers,
       body: JSON.stringify(error),
     };
     return response;
