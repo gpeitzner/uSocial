@@ -77,7 +77,7 @@ const ProfileUser = () => {
         })
         setShow(true)
         document.getElementById("formulario").reset();
-        window.location.reload(false);
+        //window.location.reload(false);              //-> VALIDAR ESO PORQUE RECARGA MUY RAPIDO Y NO MUESTRA LOS CAMBIOS
     }
 
     if (datos) {
