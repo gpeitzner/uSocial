@@ -7,7 +7,7 @@ import {
   Link,
   Switch
 } from 'react-router-dom'
-import AddUser from './components/user/add';
+import AddUser from './components/user/registrer/add';
 
 function App() {
   return (
