@@ -67,7 +67,6 @@ const ProfileUser = () => {
     };
 
     const enviarDatos = (event) => {
-        console.log(datos)
         event.preventDefault()     //evita que se recargue la pagina
         const url = urlEdit + _id;
         const user = {

@@ -7,7 +7,6 @@ const client = new aws.CognitoIdentityServiceProvider({
 })
 module.exports = (req) => {
     //CREATE USER IN COGNITO
-    console.log(req.body)
     var poolData = {
         UserPoolId: "us-east-2_BUSOUKHvw",
         Username: req.body.user,
@@ -23,6 +22,10 @@ module.exports = (req) => {
             {
                 Name: "custom:password",
                 Value: req.body.password
+            },
+            {
+                Name: "custom:modeBot",
+                Value: req.body.modeBot + ''
             }
         ]
     };
