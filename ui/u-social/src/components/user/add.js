@@ -73,15 +73,15 @@ const AddUser = () => {
                         <Image src="logo.png" roundedCircle id="logo" />
                         <form onSubmit={enviarDatos} id="formulario">
                             <div className="row">
-                                <input type="text" placeholder='Name' className="form-control" onChange={handleInputChange} name="name"></input>
+                                <input required="true" type="text" placeholder='Name' className="form-control" onChange={handleInputChange} name="name"></input>
                             </div>
                             <br></br>
                             <div className="row">
-                                <input type="text" placeholder='User Name' className="form-control" onChange={handleInputChange} name="user"></input>
+                                <input required="true" type="text" placeholder='User Name' className="form-control" onChange={handleInputChange} name="user"></input>
                             </div>
                             <br></br>
                             <div className="row">
-                                <input type="text"  placeholder='Password' className="form-control" onChange={handleInputChange} name="password"></input>
+                                <input required="true" type="text"  placeholder='Password' className="form-control" onChange={handleInputChange} name="password"></input>
                             </div>
                             <br></br>
                             <div className="row">
