@@ -9,6 +9,7 @@ import {
     Image
 } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios'
 
 const AddUser = () => {
     const [image, setImage] = useState({ preview: "", raw: "" });
@@ -40,7 +41,18 @@ const AddUser = () => {
 
     const enviarDatos = (event) => {
         event.preventDefault()
-        console.log('enviando datos...' + datos.name + ' ' + datos.user + ' ' + datos.password + ' ' + image)
+        const url = 'http://localhost:3000/addUser';
+        const user = {
+            name: datos.name,
+            user: datos.user,
+            password: datos.password,
+            image: image
+        }
+        axios.post(url, user).then((res) => {
+            console.log("usuario insertado.")
+        }).catch((e) => {
+            console.log(e)
+        })
     }
     return (
         <Container fluid="md" id="container">
