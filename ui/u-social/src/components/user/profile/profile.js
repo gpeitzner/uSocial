@@ -1,5 +1,5 @@
-import React, {useState, Fragment, useEffect} from 'react';
-import {useParams} from 'react-router'
+import React, { useState, Fragment, useEffect } from 'react';
+import { useParams } from 'react-router'
 import './profile.css'
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 import {
@@ -7,7 +7,8 @@ import {
     Row,
     Col,
     Image,
-    Toast
+    Toast,
+    Spinner
 } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios'
@@ -16,7 +17,7 @@ const ProfileUser = () => {
     const urlUser = 'http://localhost:3000/user/'
     const urlEdit = 'http://localhost:3000/user/update/'
     const nameBefore = ''
-    const {_id} = useParams();
+    const { _id } = useParams();
     const [show, setShow] = useState(false);
     const [image, setImage] = useState("");
     const [bot, setBot] = useState(false);
@@ -39,7 +40,7 @@ const ProfileUser = () => {
                 setImage(res.image)
                 nameBefore = res.user
             })
-            .catch(err => alert('Ocurio un error.'));
+            .catch(err => console.log('cargando....'));
     }
 
     useEffect(() => {
@@ -87,7 +88,7 @@ const ProfileUser = () => {
         //window.location.reload(false);              //-> VALIDAR ESO PORQUE RECARGA MUY RAPIDO Y NO MUESTRA LOS CAMBIOS
     }
 
-    if (datos) {
+    if (datos.name != '') {
         return (
             <Container fluid="lg" id="container">
                 <Row>
@@ -97,24 +98,24 @@ const ProfileUser = () => {
                 </Row>
                 <br></br>
                 <br></br>
-                <Image src={datos.image} roundedCircle id="logo"/>
+                <Image src={datos.image} roundedCircle id="logo" />
                 <Row>
                     <Col>
                         <Fragment>
                             <form onSubmit={enviarDatos} id="formulario">
                                 <div className="row">
                                     <input type="text" placeholder={datos.name} className="form-control"
-                                           onChange={handleInputChange} name="name"></input>
+                                        onChange={handleInputChange} name="name"></input>
                                 </div>
                                 <br></br>
                                 <div className="row">
                                     <input type="text" placeholder={datos.user} className="form-control"
-                                           onChange={handleInputChange} name="user"></input>
+                                        onChange={handleInputChange} name="user"></input>
                                 </div>
                                 <br></br>
                                 <div className="row">
                                     <input type="text" placeholder={datos.password} className="form-control"
-                                           onChange={handleInputChange} name="password"></input>
+                                        onChange={handleInputChange} name="password"></input>
                                 </div>
                                 <br></br>
                                 <div className="row">
@@ -147,7 +148,22 @@ const ProfileUser = () => {
             </Container>
         )
     } else {
-        return (<h1>perate we</h1>)
+        return (
+            <Container id="containerS">
+                <Row>
+                    <Col>
+                        <Spinner animation="grow" variant="primary" />
+                        <Spinner animation="grow" variant="secondary" />
+                        <Spinner animation="grow" variant="success" />
+                        <Spinner animation="grow" variant="danger" />
+                        <Spinner animation="grow" variant="warning" />
+                        <Spinner animation="grow" variant="info" />
+                        <Spinner animation="grow" variant="light" />
+                        <Spinner animation="grow" variant="dark" />
+                    </Col>
+                </Row>
+            </Container>
+        )
     }
 }
 
