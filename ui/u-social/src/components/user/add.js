@@ -12,7 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios'
 
 const AddUser = () => {
-    const [image, setImage] = useState({ preview: "", raw: "" });
+    const [image, setImage] = useState("");
     const [datos, setDatos] = useState({
         name: '',
         user: '',
