@@ -42,7 +42,7 @@ const AddUser = () => {
     };
 
     const enviarDatos = (event) => {
-        event.preventDefault()
+        event.preventDefault()     //evita que se recargue la pagina
         const url = 'http://localhost:3000/addUser';
         const user = {
             name: datos.name,
@@ -56,11 +56,12 @@ const AddUser = () => {
             console.log(e)
         })
         setShow(true)
+        document.getElementById("formulario").reset();
     }
     return (
         <Container fluid="md" id="container">
             <Row>
-                <Toast onClose={() => setShow(false)} show={show} delay={2000} autohide>
+                <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
                     <Toast.Body>Added user.</Toast.Body>
                 </Toast>
             </Row>
@@ -70,17 +71,17 @@ const AddUser = () => {
                 <Col>
                     <Fragment>
                         <Image src="logo.png" roundedCircle id="logo" />
-                        <form onSubmit={enviarDatos}>
+                        <form onSubmit={enviarDatos} id="formulario">
                             <div className="row">
-                                <input type="text" placeholder="Name" className="form-control" onChange={handleInputChange} name="name"></input>
+                                <input type="text" placeholder='Name' className="form-control" onChange={handleInputChange} name="name"></input>
                             </div>
                             <br></br>
                             <div className="row">
-                                <input type="text" placeholder="User Name" className="form-control" onChange={handleInputChange} name="user"></input>
+                                <input type="text" placeholder='User Name' className="form-control" onChange={handleInputChange} name="user"></input>
                             </div>
                             <br></br>
                             <div className="row">
-                                <input type="text" placeholder="Password" className="form-control" onChange={handleInputChange} name="password"></input>
+                                <input type="text"  placeholder='Password' className="form-control" onChange={handleInputChange} name="password"></input>
                             </div>
                             <br></br>
                             <div className="row">
