@@ -6,12 +6,14 @@ import {
     Container,
     Row,
     Col,
-    Image
+    Image,
+    Toast
 } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios'
 
 const AddUser = () => {
+    const [show, setShow] = useState(false);
     const [image, setImage] = useState("");
     const [datos, setDatos] = useState({
         name: '',
@@ -53,9 +55,17 @@ const AddUser = () => {
         }).catch((e) => {
             console.log(e)
         })
+        setShow(true)
     }
     return (
         <Container fluid="md" id="container">
+            <Row>
+                <Toast onClose={() => setShow(false)} show={show} delay={2000} autohide>
+                    <Toast.Body>Added user.</Toast.Body>
+                </Toast>
+            </Row>
+            <br></br>
+            <br></br>
             <Row>
                 <Col>
                     <Fragment>
