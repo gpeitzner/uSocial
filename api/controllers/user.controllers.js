@@ -33,4 +33,21 @@ user.createUser = async (req, res) => {
     })
 };
 
+//edit user
+user.updateUser = async (req, res) => {
+    /*const newUser = new userSchema({
+        name: req.body.name,
+        user: req.body.user,
+        password: req.body.password,
+        image: req.body.image,
+        modeBot: false
+    });*/
+
+    await userSchema.findByIdAndUpdate(req.params._id, { $set: req.body }, { new: true });
+
+    res.json({
+        status: 'User has Updated'
+    })
+};
+
 module.exports = user;

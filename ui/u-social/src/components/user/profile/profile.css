@@ -1,0 +1,19 @@
+#container {
+    margin-top: 5%;
+    width: 50%;
+}
+
+#boton {
+    background-color: rgb(110, 110, 110);
+    margin-left: 50%;
+}
+
+#logo {
+    width: 50%;
+    margin-left: 25%;
+    margin-bottom: 10%;
+}
+
+#titulo{
+    margin-left: 25%;
+}

@@ -5,4 +5,5 @@ const router = express.Router();
 router.get('/', userControllers.getusers);
 router.post('/user/registrer', userControllers.createUser);
 router.get('/user/:_id', userControllers.getOneUser);
+router.put('/user/update/:_id', userControllers.updateUser);
 module.exports = router;
