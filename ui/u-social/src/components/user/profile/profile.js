@@ -1,6 +1,7 @@
 import React, {useState, Fragment, useEffect} from 'react';
 import {useParams} from 'react-router'
 import './profile.css'
+import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 import {
     Container,
     Row,
@@ -17,12 +18,15 @@ const ProfileUser = () => {
     const {_id} = useParams();
     const [show, setShow] = useState(false);
     const [image, setImage] = useState("");
+    const [bot, setBot] = useState(false);
     const [datos, setDatos] = useState({
         name: '',
         user: '',
         password: '',
-        image: ''
+        image: '',
+        modeBot: false
     })
+
     //no use axios para esta peticion porque se quedaba haciendo peticiones, es mejor usar un unico effect y cargue la data axios funciona mejor para post, put y delete
     async function getUser() {
         let res = ''
@@ -68,7 +72,8 @@ const ProfileUser = () => {
             name: datos.name,
             user: datos.user,
             password: datos.password,
-            image: image
+            image: image,
+            modeBot: bot
         }
         axios.put(urlEdit + _id, user).then((res) => {
             console.log("usuario editado.")
@@ -108,6 +113,18 @@ const ProfileUser = () => {
                                 <div className="row">
                                     <input type="text" placeholder={datos.password} className="form-control"
                                            onChange={handleInputChange} name="password"></input>
+                                </div>
+                                <br></br>
+                                <div className="row">
+                                    <BootstrapSwitchButton
+                                        checked={datos.modeBot}
+                                        size="lg"
+                                        onlabel='BOT ON'
+                                        offlabel='BOT OFF'
+                                        onChange={(checked: boolean) => {
+                                            setBot(checked)
+                                        }}
+                                    />
                                 </div>
                                 <br></br>
                                 <div className="row">
