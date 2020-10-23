@@ -1,12 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button } from 'react-bootstrap';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch
+} from 'react-router-dom'
+import AddUser from './components/chat/user/add';
 
 function App() {
   return (
-    <Button>hola</Button>
+    <Router>
+      <Switch>
+        <Route exact path='/addUser' component={AddUser}></Route>
+      </Switch>
+    </Router>
   );
 }
 
