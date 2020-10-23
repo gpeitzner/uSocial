@@ -1,15 +1,6 @@
 const userSchema = require('../models/user');
-let aws = require('aws-sdk')
-const cognito = require('../config/cognito')
-
+const cognito = require('../src/insertUserCognito');
 const user = {};
-
-aws.config.update(cognito.aws_remote_config)
-const client = new aws.CognitoIdentityServiceProvider({
-    apiVersion: "2016-04-19",
-    region: "us-east-2"
-})
-
 //get user 
 user.getusers = async (req, res) => {
     const user = await userSchema.find();
@@ -35,36 +26,8 @@ user.createUser = async (req, res) => {
         modeBot: false
     });
 
-    await newUser.save();
-
-    //CREATE USER IN COGNITO
-    console.log(req.body)
-    var poolData = {
-        UserPoolId: "us-east-2_BUSOUKHvw",
-        Username: req.body.name,
-        UserAttributes: [
-            {
-                Name: "name",
-                Value: req.body.name
-            },
-            {
-                Name: "nickname",
-                Value: req.body.user
-            },
-            {
-                Name: "custom:password",
-                Value: req.body.password
-            }
-        ]
-    };
-    client.adminCreateUser(poolData, (error, data) => {
-        if(error){
-            console.log(error);
-        }else{
-            console.log(data);      
-        }
-    });
-
+    await newUser.save();    
+    cognito(req);  //insert cognito
     res.json({
         status: 'User created'
     })
