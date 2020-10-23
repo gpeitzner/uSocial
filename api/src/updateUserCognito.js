@@ -26,7 +26,7 @@ module.exports = (req) => {
             }
         ]
     };
-    client.adminCreateUser(poolData, (error, data) => {
+    client.adminUpdateUserAttributes(poolData, (error, data) => {
         if(error){
             console.log(error);
         }else{

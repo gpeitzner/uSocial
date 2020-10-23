@@ -15,6 +15,7 @@ import axios from 'axios'
 const ProfileUser = () => {
     const urlUser = 'http://localhost:3000/user/'
     const urlEdit = 'http://localhost:3000/user/update/'
+    const nameBefore = ''
     const {_id} = useParams();
     const [show, setShow] = useState(false);
     const [image, setImage] = useState("");
@@ -36,6 +37,7 @@ const ProfileUser = () => {
             .then((res) => {
                 setDatos(res)
                 setImage(res.image)
+                nameBefore = res.user
             })
             .catch(err => alert('Ocurio un error.'));
     }
@@ -73,7 +75,8 @@ const ProfileUser = () => {
             user: datos.user,
             password: datos.password,
             image: image,
-            modeBot: bot
+            modeBot: bot,
+            nameBef: nameBefore
         }
         axios.put(urlEdit + _id, user).then((res) => {
             console.log("usuario editado.")

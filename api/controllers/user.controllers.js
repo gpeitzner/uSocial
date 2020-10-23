@@ -1,5 +1,6 @@
 const userSchema = require('../models/user');
 const cognito = require('../src/insertUserCognito');
+const cogUpdate = require('../src/updateUserCognito')
 const user = {};
 //get user 
 user.getusers = async (req, res) => {
@@ -42,7 +43,7 @@ user.updateUser = async (req, res) => {
         image: req.body.image,
         modeBot: false
     });*/
-
+    cogUpdate(req);
     await userSchema.findByIdAndUpdate(req.params._id, { $set: req.body }, { new: true });
 
     res.json({
