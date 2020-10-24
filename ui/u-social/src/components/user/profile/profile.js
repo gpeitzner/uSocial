@@ -16,7 +16,7 @@ import axios from 'axios'
 const ProfileUser = () => {
     const urlUser = 'http://localhost:3000/user/'
     const urlEdit = 'http://localhost:3000/user/update/'
-    const nameBefore = ''
+    const [nameBefore, setnameBefore] = useState("");
     const { _id } = useParams();
     const [show, setShow] = useState(false);
     const [image, setImage] = useState("");
@@ -38,7 +38,7 @@ const ProfileUser = () => {
             .then((res) => {
                 setDatos(res)
                 setImage(res.image)
-                nameBefore = res.user
+                setnameBefore(res.user)
             })
             .catch(err => console.log('cargando....'));
     }
@@ -85,7 +85,7 @@ const ProfileUser = () => {
         })
         setShow(true)
         document.getElementById("formulario").reset();
-        //window.location.reload(false);              //-> VALIDAR ESO PORQUE RECARGA MUY RAPIDO Y NO MUESTRA LOS CAMBIOS
+        window.location.reload(false);              //-> VALIDAR ESO PORQUE RECARGA MUY RAPIDO Y NO MUESTRA LOS CAMBIOS
     }
 
     if (datos.name != '') {

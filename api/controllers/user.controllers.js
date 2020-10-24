@@ -26,11 +26,11 @@ user.createUser = async (req, res) => {
         name: req.body.name,
         user: req.body.user,
         password: req.body.password,
-        image: 'https://pro2-g16.s3.us-east-2.amazonaws.com/users/'+nameImage,
+        image: 'https://pro2-g16.s3.us-east-2.amazonaws.com/users/' + nameImage,
         modeBot: false
     });
 
-    await newUser.save();    
+    await newUser.save();
     cognito(req);  //insert cognito
     res.json({
         status: 'User created'
@@ -46,9 +46,12 @@ user.updateUser = async (req, res) => {
         image: req.body.image,
         modeBot: false
     });*/
-    nameImage = uploadImage(req.body)
-    req.body.image = 'https://pro2-g16.s3.us-east-2.amazonaws.com/users/'+nameImage
-    await userSchema.findByIdAndUpdate(req.params._id, { $set: req.body }, { new: true });    
+    console.log(req.body)
+    if (req.body[0] == "h") {
+        nameImage = uploadImage(req.body)
+        req.body.image = 'https://pro2-g16.s3.us-east-2.amazonaws.com/users/' + nameImage
+    }
+    await userSchema.findByIdAndUpdate(req.params._id, { $set: req.body }, { new: true });
     cogUpdate(req);
 
     res.json({
