@@ -87,7 +87,7 @@ const AddUser = () => {
                             <div className="row">
                                 <label className="custom-file-upload">
                                     <input
-                                        accept="image/png"
+                                        accept="image/png, .jpg, .jpeg"
                                         type="file"
                                         id="upload-button"
                                         onChange={handleChangeLoad}
