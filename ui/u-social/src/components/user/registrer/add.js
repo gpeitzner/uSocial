@@ -37,7 +37,7 @@ const AddUser = () => {
             reader.onload = () => {
                 setImage(reader.result)
             }
-            reader.onerror = error => {};
+            reader.onerror = error => { };
         }
     };
 
@@ -81,12 +81,13 @@ const AddUser = () => {
                             </div>
                             <br></br>
                             <div className="row">
-                                <input required="true" type="text"  placeholder='Password' className="form-control" onChange={handleInputChange} name="password"></input>
+                                <input required="true" type="text" placeholder='Password' className="form-control" onChange={handleInputChange} name="password"></input>
                             </div>
                             <br></br>
                             <div className="row">
                                 <label className="custom-file-upload">
                                     <input
+                                        accept="image/png"
                                         type="file"
                                         id="upload-button"
                                         onChange={handleChangeLoad}

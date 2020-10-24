@@ -1,6 +1,7 @@
 const userSchema = require('../models/user');
 const cognito = require('../src/insertUserCognito');
 const cogUpdate = require('../src/updateUserCognito')
+const uploadImage = require('../src/insertPictureS3')
 const user = {};
 //get user 
 user.getusers = async (req, res) => {
@@ -29,6 +30,7 @@ user.createUser = async (req, res) => {
 
     await newUser.save();    
     cognito(req);  //insert cognito
+    nameImage = uploadImage(req.body)
     res.json({
         status: 'User created'
     })
@@ -44,6 +46,7 @@ user.updateUser = async (req, res) => {
         modeBot: false
     });*/
     cogUpdate(req);
+    nameImage = uploadImage(req.body)
     await userSchema.findByIdAndUpdate(req.params._id, { $set: req.body }, { new: true });
 
     res.json({

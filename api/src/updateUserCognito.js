@@ -9,7 +9,7 @@ module.exports = (req) => {
     //CREATE USER IN COGNITO
     var poolData = {
         UserPoolId: "us-east-2_BUSOUKHvw",
-        Username: req.body.user,
+        Username: req.body.nameBef,
         UserAttributes: [
             {
                 Name: "name",
