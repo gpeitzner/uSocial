@@ -7,33 +7,74 @@ const client = new aws.CognitoIdentityServiceProvider({
 })
 module.exports = (req) => {
     //CREATE USER IN COGNITO
-    var poolData = {
-        UserPoolId: "us-east-2_BUSOUKHvw",
-        Username: req.body.nameBef,
-        UserAttributes: [
-            {
-                Name: "name",
-                Value: req.body.name
-            },
-            {
-                Name: "nickname",
-                Value: req.body.user
-            },
-            {
-                Name: "custom:password",
-                Value: req.body.password
-            },
-            {
-                Name: "custom:modeBot",
-                Value: req.body.modeBot + ''
+    if (req.body.nameBef != req.body.user) {
+        //cambio username
+        var poolData = {
+            UserPoolId: "us-east-2_BUSOUKHvw",
+            Username: req.body.user,
+            UserAttributes: [
+                {
+                    Name: "name",
+                    Value: req.body.name
+                },
+                {
+                    Name: "nickname",
+                    Value: req.body.user
+                },
+                {
+                    Name: "custom:password",
+                    Value: req.body.password
+                },
+                {
+                    Name: "custom:modeBot",
+                    Value: req.body.modeBot + ''
+                }
+            ]
+        };
+        client.adminCreateUser(poolData, (error, data) => {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(data);
             }
-        ]
-    };
-    client.adminUpdateUserAttributes(poolData, (error, data) => {
-        if(error){
-            console.log(error);
-        }else{
-            console.log(data);      
-        }
-    });
+        });
+
+        //elimino el anterior
+        client.adminDeleteUser({
+            UserPoolId: 'us-east-2_BUSOUKHvw',
+            Username: req.body.nameBef,
+          }).promise();
+
+    } else {
+
+        var poolData = {
+            UserPoolId: "us-east-2_BUSOUKHvw",
+            Username: req.body.nameBef,
+            UserAttributes: [
+                {
+                    Name: "name",
+                    Value: req.body.name
+                },
+                {
+                    Name: "nickname",
+                    Value: req.body.user
+                },
+                {
+                    Name: "custom:password",
+                    Value: req.body.password
+                },
+                {
+                    Name: "custom:modeBot",
+                    Value: req.body.modeBot + ''
+                }
+            ]
+        };
+        client.adminUpdateUserAttributes(poolData, (error, data) => {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(data);
+            }
+        });
+    }
 }
