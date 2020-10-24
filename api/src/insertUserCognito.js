@@ -25,7 +25,7 @@ module.exports = (req) => {
             },
             {
                 Name: "custom:modeBot",
-                Value: false
+                Value: false + ''
             }
         ]
     };
