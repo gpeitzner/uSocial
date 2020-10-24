@@ -47,7 +47,7 @@ user.updateUser = async (req, res) => {
         modeBot: false
     });*/
     console.log(req.body)
-    if (req.body[0] == "h") {
+    if (req.body[0] != "h") {
         nameImage = uploadImage(req.body)
         req.body.image = 'https://pro2-g16.s3.us-east-2.amazonaws.com/users/' + nameImage
     }
