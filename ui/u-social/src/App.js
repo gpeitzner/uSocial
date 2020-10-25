@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import AddUser from "./components/user/registrer/add";
 import ProfileUser from "./components/user/profile/profile";
 import Login from "./components/user/login/login";
+import Home from "./components/home/home";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route exact path="/registrer" component={AddUser}></Route>
         <Route exact path="/user/:_id" component={ProfileUser}></Route>
         <Route exact path="/" component={Login}></Route>
+        <Route exact path="/home" component={Home}></Route>
       </Switch>
     </Router>
   );
