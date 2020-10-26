@@ -16,8 +16,10 @@ const Join = () => {
             <Container>
                 <div><input placeholder="Name" className="joinInput" type="text" onChange={(event) => setName(event.target.value)}></input></div>
                 <div><input placeholder="Room" className="joinInput" type="text" onChange={(event) => setRoom(event.target.value)}></input></div>
-                {/*este link debo accionar cuando le de chat a una persona*/}
-                <Link onClick={event => (!name || !room) ? event.preventDefault(): null} to={`/chat?name=${name}&room=${room}`}>
+                {/*este link debo accionar cuando le de chat a una persona*/
+                    console.log(!name, !room)
+                }
+                <Link onClick={event => (!name || !room) ? event.preventDefault() : null} to={`/chat?name=${name}&room=${room}`}>
                     <Button variant="success"> Sign In </Button>
                 </Link>
             </Container>

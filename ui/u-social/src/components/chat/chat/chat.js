@@ -23,8 +23,9 @@ const Chat = ({ location }) => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [users, setUsers] = useState([]);
-    const [initChat, setInitChat] = useState(false);
+    const [initChat, setInitChat] = useState(true);
     useEffect(() => {
+        console.log(location)
         if (location.search != "") {
             setInitChat(true)
             const { name, room } = queryString.parse(location.search);
@@ -68,6 +69,7 @@ const Chat = ({ location }) => {
             socket.on('message', (message) => {
                 setMessages([...messages, message])
             })
+            //window.location.reload(false); 
         } else {
             setInitChat(false)
         }

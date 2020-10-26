@@ -4,15 +4,24 @@ import {
     ListGroupItem,
     Image
 } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
-const User = ({ user }) => (
-    <Link onClick={event => (!user ) ? event.preventDefault(): null} to={`/chat?name=${user.name}&room=hola`}>
-        <ListGroupItem>
-            <Image src={user.image} className="imageUser" roundedCircle />
-            {user.name}
-        </ListGroupItem>
-    </Link>
-)
+const User = ({ user }) => {
+    let history = useHistory();
+
+    function refreshPage() {
+        history.push(`/chat?name=${user.name}&room=hola`)
+        window.location.reload();
+    }
+
+    return (
+        <Link onClick={refreshPage} >
+            <ListGroupItem>
+                <Image src={user.image} className="imageUser" roundedCircle />
+                {user.name}
+            </ListGroupItem>
+        </Link>
+    )
+}
 
 export default User;
