@@ -5,7 +5,7 @@ const socketio = require('socket.io')
 const http = require('http')
 const app = express()
 
-//const { mongoose } = require('./config/database')
+const { mongoose } = require('./config/database')
 const server = http.createServer(app)   //required for socket.io
 const io = socketio(server)
 const { addUser, removeUser, getUser, getUserInRoom } = require('./controllers/users')

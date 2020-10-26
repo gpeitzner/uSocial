@@ -5,9 +5,9 @@ const uploadImage = require('../src/insertPictureS3')
 const user = {};
 //get user 
 user.getusers = async (req, res) => {
-    //const user = await userSchema.find();
-    //res.json(user);
-    res.send("welcome to /")
+    console.log('hello')
+    const user = await userSchema.find();
+    res.json(user);
 };
 
 user.getOneUser = async (req, res) => {
