@@ -5,6 +5,7 @@ import {
 import './input.css'
 
 const Input = ({ message, setMessage, sendMessage }) => (
+    /**verificar si el usuario esta en modo bot o no  */
     <form className="form">
         <input
             className="input"

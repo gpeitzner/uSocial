@@ -11,7 +11,7 @@ import {
 } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios'
-
+const logoPath = require("../../../assets/red.png");
 const AddUser = () => {
     const [show, setShow] = useState(false);
     const [image, setImage] = useState("");
@@ -59,7 +59,7 @@ const AddUser = () => {
         document.getElementById("formulario").reset();
     }
     return (
-        <Container fluid="md" id="container">
+        <Container fluid="md" id="containerReg">
             <Row>
                 <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
                     <Toast.Body>Added user.</Toast.Body>
@@ -70,21 +70,21 @@ const AddUser = () => {
             <Row>
                 <Col>
                     <Fragment>
-                        <Image src="logo.png" roundedCircle id="logo" />
+                        <Image src={logoPath} roundedCircle id="logo" />
                         <form onSubmit={enviarDatos} id="formulario">
-                            <div className="row">
+                            <div>
                                 <input required="true" type="text" placeholder='Name' className="form-control" onChange={handleInputChange} name="name"></input>
                             </div>
                             <br></br>
-                            <div className="row">
+                            <div>
                                 <input required="true" type="text" placeholder='User Name' className="form-control" onChange={handleInputChange} name="user"></input>
                             </div>
                             <br></br>
-                            <div className="row">
+                            <div>
                                 <input required="true" type="text" placeholder='Password' className="form-control" onChange={handleInputChange} name="password"></input>
                             </div>
                             <br></br>
-                            <div className="row">
+                            <div>
                                 <label className="custom-file-upload">
                                     <input
                                         accept="image/png, .jpg, .jpeg"
