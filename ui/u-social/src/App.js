@@ -6,6 +6,8 @@ import AddUser from "./components/user/registrer/add";
 import ProfileUser from "./components/user/profile/profile";
 import Login from "./components/user/login/login";
 import Home from "./components/home/home";
+import Join from "./components/chat/join/join";
+import Chat from "./components/chat/chat/chat";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route exact path="/user/:_id" component={ProfileUser}></Route>
         <Route exact path="/" component={Login}></Route>
         <Route exact path="/home" component={Home}></Route>
+        <Route exact path="/join" component={Join}></Route>
+        <Route exact path="/chat" component={Chat}></Route>
       </Switch>
     </Router>
   );

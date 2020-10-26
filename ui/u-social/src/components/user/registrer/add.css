@@ -3,9 +3,8 @@
     width: 20%;
 }
 
-#boton {
-    background-color: rgb(110, 110, 110);
-    margin-left: 30%;
+#botonReg {
+    width: 100%;
 }
 
 #logo {

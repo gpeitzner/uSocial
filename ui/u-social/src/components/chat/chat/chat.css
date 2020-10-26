@@ -1,0 +1,17 @@
+#chatOuterContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: black;
+}
+
+#chatInnerContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    border-radius: 8px;
+    height:   60%;
+    width: 35%;
+}

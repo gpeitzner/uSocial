@@ -90,7 +90,7 @@ const ProfileUser = () => {
 
     if (datos.name != '') {
         return (
-            <Container fluid="lg" id="container">
+            <Container fluid="lg" id="containerP">
                 <Row>
                     <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
                         <Toast.Body>Updated user.</Toast.Body>

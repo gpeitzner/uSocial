@@ -95,7 +95,7 @@ const AddUser = () => {
                                 </label>
                             </div>
                             <br></br>
-                            <button id="boton" type="submit" className="btn btn-primary">Registrer</button>
+                            <Button id="botonReg" variant="success" type="submit" >Registrer</Button>
                         </form>
                     </Fragment>
                 </Col>
