@@ -1,0 +1,15 @@
+.usersOnLine {
+    background: whitesmoke;    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgb(0, 102, 255);
+    border-radius: 5px;
+    height: 100%;
+    width: 100%;
+    color: white;
+}
+
+.users{
+    width: 300px;
+}
