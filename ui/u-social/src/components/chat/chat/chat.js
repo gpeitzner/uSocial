@@ -75,9 +75,10 @@ const Chat = ({ location }) => {
         }
     }, [messages])
 
-    //function for sending messages 
+    //function for sending messages  
     const sendMessage = (event) => {
         event.preventDefault();
+        console.log("message is: " + message)
         if (message) {
             socket.emit('sendMessage', message, () => setMessage(''))
         }

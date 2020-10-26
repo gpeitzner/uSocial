@@ -10,7 +10,11 @@ const User = ({ user }) => {
     let history = useHistory();
 
     function refreshPage() {
-        history.push(`/chat?name=${user.name}&room=hola`)
+        //usernameLogin-usernameChat
+        const ro = ['testLogin', user.user]
+        ro.sort();  //ordenamos en alfabetico para que cuando el otro usaurio se una este en el mismo nombre de sala
+        const room = ro[0] + '-' + ro[1]
+        history.push(`/chat?name=${user.user}&room=${room}`)
         window.location.reload();
     }
 
