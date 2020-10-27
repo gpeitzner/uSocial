@@ -7,12 +7,14 @@ import Button from "react-bootstrap/Button";
 import Navbar from "react-bootstrap/Navbar";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
+import { useCookies } from "react-cookie";
 
 function Home() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(true);
   const logoPath = require("../../assets/red.png");
+  const [cookies, setCookie] = useCookies(["account"]);
   return (
     <div>
       <Navbar

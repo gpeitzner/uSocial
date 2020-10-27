@@ -6,6 +6,7 @@ import Image from "react-bootstrap/Image";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import { Redirect } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -13,7 +14,7 @@ function Login() {
   const [show, setShow] = useState(false);
   const [toHome, setToHome] = useState(false);
   const logoPath = require("../../../assets/red.png");
-
+  const [cookies, setCookie] = useCookies(["account"]);
   function handleSubmit(event) {
     fetch("http://localhost:3000/user/login", {
       method: "POST",
@@ -27,7 +28,7 @@ function Login() {
         if (results["error"]) {
           setShow(true);
         } else {
-          localStorage.setItem("account", results);
+          setCookie("account", results);
           setToHome(true);
         }
       })
