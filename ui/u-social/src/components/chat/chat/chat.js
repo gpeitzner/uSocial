@@ -5,20 +5,29 @@ import {
     Container,
     Row,
     Col,
-    Image
+    Image,
+    Toast,
+    Button
 } from 'react-bootstrap'
 import './chat.css'
 import InfoBar from '../infoBar/infoBar';
 import Input from '../input/input'
 import Messages from '../messages/messages'
 import Users from '../users/users';
+import Graph from '../graphics/graph';
 import axios from 'axios'
+
+import { Line } from 'react-chartjs-2';
 
 let socket;
 const endPoint = 'http://localhost:3000'
 const pathImage = require("../../../assets/chat.png");
 
+
 const Chat = ({ location }) => {
+    const [show, setShow] = useState(false);
+    const [dataL, setDataL] = useState({})
+    const [opcionesL, setOpcionesL] = useState({})
     const [name, setName] = useState('');
     const [room, setRoom] = useState('');
     const [select, setSelect] = useState('');
@@ -106,6 +115,20 @@ const Chat = ({ location }) => {
                 }
                 setMessages([...messages, msg2])
                 setMessage('')
+            } else if (step === 5) {
+                const msg2 = {
+                    user: select.trim().toLowerCase(),
+                    text: '¿ Pais ?'
+                }
+                setMessages([...messages, msg2])
+                setMessage('')
+            } else if (step === 6) {
+                const msg2 = {
+                    user: select.trim().toLowerCase(),
+                    text: '¿ Rango de fechas ?'
+                }
+                setMessages([...messages, msg2])
+                setMessage('')
             }
 
             if (step === 4) {
@@ -151,6 +174,68 @@ const Chat = ({ location }) => {
                 }).catch((e) => {
                     console.log(e)
                 })
+            } else if (step == 7) {
+                //grafica
+                const dates = messBot[1].split('a')
+                console.log(JSON.stringify(dates))
+                const data = {
+                    country: messBot[0],
+                    start: dates[0].trim(),
+                    end: dates[1].trim()
+                }
+                axios.post('https://ji6c7sasg0.execute-api.us-east-2.amazonaws.com/prod/country', data).then((res) => {
+                    console.log(res)
+                    let days = []
+                    let deaths = []
+                    let recovered = []
+                    let confirmed = []
+                    for (let index = 0; index < res.data.body.length; index++) {
+                        days.push(res.data.body[index].date)
+                        confirmed.push(res.data.body[index].confirmed)
+                        deaths.push(res.data.body[index].deaths)
+                        recovered.push(res.data.body[index].recovered)
+                    }
+
+                    console.log(days, deaths, recovered, confirmed)
+                    setDataL({
+                        labels: days,
+                        datasets: [{
+                            label: 'confirmed',
+                            backgroundColor: 'rgba(0,255,0,0.2)',
+                            borderColor: 'black',
+                            borderWidth: 1,
+                            hoverBorderColor: '#FF0000',
+                            data: confirmed
+                        }, {
+                            label: 'deaths',
+                            backgroundColor: 'rgba(0,255,255,255)',
+                            borderColor: 'black',
+                            borderWidth: 1,
+                            hoverBorderColor: '#FF0000',
+                            data: deaths
+                        },
+                        {
+                            label: 'recovered',
+                            backgroundColor: 'rgba(220,220,220,1)',
+                            borderColor: 'black',
+                            borderWidth: 1,
+                            hoverBorderColor: '#FF0000',
+                            data: recovered
+                        }]
+                    })
+                    setOpcionesL({
+                        maintainAspectRatio: false,
+                        responsive: true
+                    })
+
+                    setShow(true)           ///activamos toast
+
+                    console.log(dataL)
+                    console.log(opcionesL)
+
+                }).catch((e) => {
+                    console.log(e)
+                })
             }
         }
     }, [step])
@@ -158,7 +243,7 @@ const Chat = ({ location }) => {
     //function for sending messages  
     const sendMessage = (event) => {
         event.preventDefault();
-        if (message.trim().toLowerCase() === "casos") {
+        if (message.trim().toLowerCase() === "casos" || message.trim().toLowerCase() === "grafica de casos") {
             //verifico si esta en modo bot o no 
             var found = users.find(function (element) {
                 return element.user == select;
@@ -174,10 +259,18 @@ const Chat = ({ location }) => {
                     setMessages([...messages, msg1])
                     setMessage('')
                     setStep(1)
-                } else {
+                } else if (message.trim().toLowerCase() === "grafica de casos") {
                     const msg1 = {
                         user: name.trim().toLowerCase(),
                         text: message.trim().toLowerCase()
+                    }
+                    setMessages([...messages, msg1])
+                    setMessage('')
+                    setStep(5)          // de 5 en adelante sera para las graficas 
+                } else {
+                    const msg1 = {
+                        user: name.trim().toLowerCase(),
+                        text: message
                     }
                     setMessages([...messages, msg1])
                     setMessage('')
@@ -192,7 +285,7 @@ const Chat = ({ location }) => {
             if (bot) {  //esta en modo bot osea que se encuentra respondiendo las preguntas 
                 const msg1 = {
                     user: name.trim().toLowerCase(),
-                    text: message.trim().toLowerCase()
+                    text: message
                 }
                 setMessages([...messages, msg1])
                 setMessage('')
@@ -214,17 +307,31 @@ const Chat = ({ location }) => {
                         <Users users={users} />
                     </Container>
                 </Col>
-
                 {initChat
                     ?
                     (
                         <Col>
                             <Container id="chatOuterContainer">
-                                <Container id="chatInnerContainer">
-                                    <InfoBar name={select} />
-                                    <Messages messages={messages} name={name} />
-                                    <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
-                                </Container>
+                                {show
+                                    ?
+                                    (
+                                        <div>
+                                            <Button className="closeButton"
+                                                onClick={(event) => setShow(false)}
+                                            >Close</Button>
+                                            <Container id="chatOuterContainer">
+                                                <Line data={dataL} options={opcionesL} onClose={() => setShow(false)} show={show} delay={10000} autohide ></Line>
+                                            </Container>
+                                        </div>
+                                    ) :
+                                    (
+                                        <Container id="chatInnerContainer">
+                                            <InfoBar name={select} />
+                                            <Messages messages={messages} name={name} />
+                                            <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+                                        </Container>
+                                    )
+                                }
                             </Container>
                         </Col>
                     )
