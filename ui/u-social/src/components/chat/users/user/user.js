@@ -14,7 +14,7 @@ const User = ({ user }) => {
         const ro = ['testLogin', user.user]
         ro.sort();  //ordenamos en alfabetico para que cuando el otro usaurio se una este en el mismo nombre de sala
         const room = ro[0] + '-' + ro[1]
-        history.push(`/chat?name=${user.user}&room=${room}`)
+        history.push(`/chat?name=${'testLogin'}&room=${room}&select=${user.user}`)
         window.location.reload();
     }
 

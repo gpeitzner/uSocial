@@ -19,6 +19,15 @@ user.getOneUser = async (req, res) => {
     }
 }
 
+user.getUserName = async (req, res) => {
+    try {
+        const user = await userSchema.find({ user: req.body.user});
+        res.json(user)
+    } catch (e) {
+        res.json({error: "Usuario no existe."})
+    }
+}
+
 //create user
 user.createUser = async (req, res) => {
     //https://pro2-g16.s3.us-east-2.amazonaws.com/users/testq123.jpeg    
@@ -47,7 +56,7 @@ user.updateUser = async (req, res) => {
         image: req.body.image,
         modeBot: false
     });*/
-            
+
     if (req.body.image[0] != 'h') {
         nameImage = uploadImage(req.body)
         req.body.image = 'https://pro2-g16.s3.us-east-2.amazonaws.com/users/' + nameImage

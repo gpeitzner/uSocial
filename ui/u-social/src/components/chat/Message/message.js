@@ -7,7 +7,6 @@ const Message = ({ message: { user, text }, name }) => {
     if (user === trimmedName) {
         isSentuser = true
     }
-
     return (
         isSentuser
             ? (
