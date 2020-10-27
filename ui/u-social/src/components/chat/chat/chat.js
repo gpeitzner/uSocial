@@ -12,6 +12,7 @@ import InfoBar from '../infoBar/infoBar';
 import Input from '../input/input'
 import Messages from '../messages/messages'
 import Users from '../users/users';
+import axios from 'axios'
 
 let socket;
 const endPoint = 'http://localhost:3000'
@@ -108,9 +109,48 @@ const Chat = ({ location }) => {
             }
 
             if (step === 4) {
-                setStep(0)
-                setBot(false)
-                console.log("peticion covid")
+                const data = {
+                    country: messBot[0],
+                    start: messBot[1]
+                }
+                axios.post('https://ji6c7sasg0.execute-api.us-east-2.amazonaws.com/prod/country', data).then((res) => {
+                    if (messBot[2] == 'confirmados') {
+                        const msg2 = {
+                            user: select.trim().toLowerCase(),
+                            text: `${res.data.body[0].confirmed} confirmados en ${messBot[0]} el dia ${messBot[1]}.`
+                        }
+                        setMessages([...messages, msg2])
+                        setMessage('')
+                    } else if (messBot[2] == 'recuperados') {
+                        const msg2 = {
+                            user: select.trim().toLowerCase(),
+                            text: `${res.data.body[0].recovered} confirmados en ${messBot[0]} el dia ${messBot[1]}.`
+                        }
+                        setMessages([...messages, msg2])
+                        setMessage('')
+                    } else if (messBot[2] == 'muertes') {
+                        const msg2 = {
+                            user: select.trim().toLowerCase(),
+                            text: `${res.data.body[0].deaths} confirmados en ${messBot[0]} el dia ${messBot[1]}.`
+                        }
+                        setMessages([...messages, msg2])
+                        setMessage('')
+                    } else {
+                        //todo
+                        const msg2 = {
+                            user: select.trim().toLowerCase(),
+                            text: `${res.data.body[0].confirmed} confirmados, ${res.data.body[0].deaths} confirmados, 
+                                    ${res.data.body[0].deaths} confirmados en ${messBot[0]} el dia ${messBot[1]}.`
+                        }
+                        setMessages([...messages, msg2])
+                        setMessage('')
+                    }
+                    setMessBot([])
+                    setBot(false)
+                    setStep(0)
+                }).catch((e) => {
+                    console.log(e)
+                })
             }
         }
     }, [step])
@@ -141,6 +181,7 @@ const Chat = ({ location }) => {
                     }
                     setMessages([...messages, msg1])
                     setMessage('')
+                    setMessBot([...messBot, message])
                     setStep(step + 1)
                 }
             } else {
@@ -155,6 +196,7 @@ const Chat = ({ location }) => {
                 }
                 setMessages([...messages, msg1])
                 setMessage('')
+                setMessBot([...messBot, message])
                 setStep(step + 1)
 
             } else {
