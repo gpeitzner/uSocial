@@ -177,14 +177,12 @@ const Chat = ({ location }) => {
             } else if (step == 7) {
                 //grafica
                 const dates = messBot[1].split('a')
-                console.log(JSON.stringify(dates))
                 const data = {
                     country: messBot[0],
                     start: dates[0].trim(),
                     end: dates[1].trim()
                 }
                 axios.post('https://ji6c7sasg0.execute-api.us-east-2.amazonaws.com/prod/country', data).then((res) => {
-                    console.log(res)
                     let days = []
                     let deaths = []
                     let recovered = []
@@ -195,8 +193,6 @@ const Chat = ({ location }) => {
                         deaths.push(res.data.body[index].deaths)
                         recovered.push(res.data.body[index].recovered)
                     }
-
-                    console.log(days, deaths, recovered, confirmed)
                     setDataL({
                         labels: days,
                         datasets: [{
@@ -229,9 +225,9 @@ const Chat = ({ location }) => {
                     })
 
                     setShow(true)           ///activamos toast
-
-                    console.log(dataL)
-                    console.log(opcionesL)
+                    setMessBot([])
+                    setBot(false)
+                    setStep(0)
 
                 }).catch((e) => {
                     console.log(e)
