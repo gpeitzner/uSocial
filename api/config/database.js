@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const urldb = 'mongodb://18.218.66.6:27017/db-pro2-g16';
+const urldb = 'mongodb://3.138.36.170/db-pro2-g16';
 
 mongoose.connect(urldb)
     .then(db => console.log('DataBases connected.'))

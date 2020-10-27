@@ -9,8 +9,14 @@ import Alert from "react-bootstrap/Alert";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const logoPath = require("../../../assets/red.png");
+
+  function handleSubmit(event) {
+    console.log(username, password);
+    event.preventDefault();
+  }
+
   return (
     <div>
       <Container style={{ marginTop: "10vh" }}>
@@ -38,7 +44,7 @@ function Login() {
             )}
             <form
               className="border mt-4 p-4"
-              onSubmit={() => console.log("hola")}
+              onSubmit={handleSubmit}
             >
               <p className="font-weight-bold" style={{ fontSize: "0.9em" }}>
                 Nombre de usuario
