@@ -45,7 +45,7 @@ function getTags(name) {
         },
       },
       MaxLabels: 123,
-      MinConfidence: 70,
+      MinConfidence: 85,
     };
     RKG.detectLabels(params, function (err, data) {
       if (err) {
@@ -99,6 +99,13 @@ publish.createPublish = async (req, res) => {
     console.log(error);
     res.json({ error: "something go wrong" });
   }
+};
+
+publish.getPublications = async (req, res) => {
+  try {
+    const publications = await publishSchema.find();
+    res.json(publications);
+  } catch (error) {}
 };
 
 module.exports = publish;
