@@ -15,10 +15,36 @@ function Home() {
   const [cookies, setCookie] = useCookies(["account"]);
   const [text, setText] = useState("");
   const [image, setImage] = useState("");
+  console.log(cookies.account);
+
   function handlePublish(event) {
-    console.log("PUBLICACION", text, image);
-    axios.post();
+    toBase64(image)
+      .then((image64) => {
+        axios
+          .post("http://localhost:3000/publish", {
+            username: cookies.account.user,
+            avatar: cookies.account.image,
+            image64: image64.substring(22, image64.length),
+            text: text,
+          })
+          .then((results) => console.log(results))
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
     event.preventDefault();
+  }
+
+  function toBase64(image) {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = function () {
+        resolve(reader.result.toString());
+      };
+      reader.onerror = function (error) {
+        reject(error);
+      };
+    });
   }
   return (
     <div>

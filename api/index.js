@@ -65,6 +65,7 @@ io.on("connection", (socket) => {
 
 //routes
 app.use(require("./routes/user.routes"));
+app.use(require("./routes/publish.routes"));
 
 //cambie app por server para que funcionara el socket
 server.listen(app.get("port"), () => {
