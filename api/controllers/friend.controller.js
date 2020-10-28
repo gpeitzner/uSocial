@@ -34,4 +34,22 @@ friend.listUnknows = async (req, res) => {
   }
 };
 
+friend.listKnows = async (req, res) => {
+  const username = req.params.id;
+  try {
+    const currentFriends = await friendSchema.find(
+      { username: username },
+      { friend: 1, _id: 0 }
+    );
+    const finalFriends = currentFriends.map((tmp) => tmp.friend);
+    const results = await userSchema.find(
+      { user: { $in: finalFriends } },
+      { user: 1, image: 1, _id: 0 }
+    );
+    res.json(results);
+  } catch (error) {
+    res.json({ error: "something go wrong" });
+  }
+};
+
 module.exports = friend;
