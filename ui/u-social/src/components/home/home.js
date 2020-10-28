@@ -69,8 +69,8 @@ function Home() {
               width="1em"
               height="1em"
               viewBox="0 0 16 16"
-              class="bi bi-chat-dots-fill"
-              fill="currentColor"
+              className="bi bi-chat-dots-fill"
+              style={{ fill: "currentColor" }}
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -94,8 +94,8 @@ function Home() {
               width="1em"
               height="1em"
               viewBox="0 0 16 16"
-              class="bi bi-x-circle-fill"
-              fill="currentColor"
+              className="bi bi-x-circle-fill"
+              style={{ fill: "currentColor" }}
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -133,8 +133,8 @@ function Home() {
                   width="1em"
                   height="1em"
                   viewBox="0 0 16 16"
-                  class="bi bi-plus-circle-fill"
-                  fill="currentColor"
+                  className="bi bi-plus-circle-fill"
+                  style={{ fill: "currentColor" }}
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path

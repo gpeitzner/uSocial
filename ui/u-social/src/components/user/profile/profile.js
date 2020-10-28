@@ -124,7 +124,7 @@ const ProfileUser = () => {
                                         size="lg"
                                         onlabel='BOT ON'
                                         offlabel='BOT OFF'
-                                        onChange={(checked: boolean) => {
+                                        onChange={(checked) => {
                                             setBot(checked)
                                         }}
                                     />
