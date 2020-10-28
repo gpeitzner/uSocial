@@ -12,7 +12,6 @@ const TRANSLATE = new AWS.Translate({
   secretAccessKey: "PyVAbmB3L8zgvLVjdEfF2xj1vtX1itmqrxNfEFZ4",
 });
 const publishSchema = require("../models/publish");
-const user = require("./user.controllers");
 const publish = {};
 
 function uploadImageToS3(imageName, image64) {
