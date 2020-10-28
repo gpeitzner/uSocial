@@ -8,13 +8,18 @@ import Navbar from "react-bootstrap/Navbar";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useCookies } from "react-cookie";
+import axios from "axios";
 
 function Home() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [show, setShow] = useState(true);
   const logoPath = require("../../assets/red.png");
   const [cookies, setCookie] = useCookies(["account"]);
+  const [text, setText] = useState("");
+  const [image, setImage] = useState("");
+  function handlePublish(event) {
+    console.log("PUBLICACION", text, image);
+    axios.post();
+    event.preventDefault();
+  }
   return (
     <div>
       <Navbar
@@ -48,22 +53,6 @@ function Home() {
               />
             </svg>{" "}
             Chat
-          </Button>{" "}
-          <Button variant="dark" size="sm">
-            <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 16 16"
-              class="bi bi-plus-circle-fill"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"
-              />
-            </svg>{" "}
-            Publicar
           </Button>
         </Navbar.Brand>
         <div>
@@ -95,6 +84,41 @@ function Home() {
       <Container className="my-4">
         <Row>
           <Col className="col-sm-12 col-md-12 col-lg-8">
+            <form className="border p-4" onSubmit={handlePublish}>
+              <input
+                type="text"
+                value={text}
+                onChange={(event) => setText(event.target.value)}
+                style={{ width: "100%" }}
+              ></input>
+              <input
+                className="mt-2"
+                type="file"
+                onChange={(event) => setImage(event.target.files[0])}
+                style={{ width: "100%" }}
+              ></input>
+              <Button
+                type="submit"
+                className="mt-3"
+                variant="dark"
+                style={{ width: "100%" }}
+              >
+                <svg
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  class="bi bi-plus-circle-fill"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"
+                  />
+                </svg>{" "}
+                Publicar
+              </Button>
+            </form>
             <Card className="mt-2" style={{ width: "100%" }}>
               <Card.Img
                 variant="top"
