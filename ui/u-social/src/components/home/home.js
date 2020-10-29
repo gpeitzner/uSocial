@@ -15,7 +15,7 @@ function Home() {
   const [cookies, setCookie] = useCookies(["account"]);
   const [text, setText] = useState("");
   const [image, setImage] = useState("");
-  const [publications, setPublications] = useState(null);
+  const [publications, setPublications] = useState([]);
   const [tags, setTags] = useState([]);
   const [newContacts, setNewContacts] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -32,7 +32,7 @@ function Home() {
             image64: image64.substring(22, image64.length),
             text: text,
           })
-          .then((results) => console.log(results))
+          .then((results) => getInitData())
           .catch((error) => console.log(error));
       })
       .catch((error) => console.log(error));
@@ -52,7 +52,24 @@ function Home() {
     });
   }
 
+  function follow(friend) {
+    console.log("FOLLOW", friend);
+    axios
+      .post("http://localhost:3000/friend", {
+        username: cookies.account.user,
+        friend: friend,
+      })
+      .then(() => {
+        getInitData();
+      })
+      .catch(() => {});
+  }
+
   useEffect(() => {
+    getInitData();
+  }, []);
+
+  function getInitData() {
     axios
       .get("http://localhost:3000/friend/knows/" + cookies.account.user)
       .then((knows) => {
@@ -80,7 +97,11 @@ function Home() {
                   />{" "}
                   {contact.user}
                 </div>
-                <Button variant="outline-dark" size="sm">
+                <Button
+                  variant="outline-dark"
+                  size="sm"
+                  onClick={() => follow(contact.user)}
+                >
                   <svg
                     width="1em"
                     height="1em"
@@ -103,19 +124,30 @@ function Home() {
         setNewContacts(contacts);
       })
       .catch((error) => console.log(error));
-  }, []);
+  }
+
+  useEffect(() => {
+    if (publications.length) {
+      console.log("FLAG", publications);
+    }
+  }, [publications]);
+
+  function translate(id) {
+    console.log("TRANSLATE", id);
+  }
 
   function getInitPublications(contacts) {
     return new Promise((resolve, reject) => {
       axios
         .get("http://localhost:3000/publish")
-        .then((publications) => {
-          console.log(publications.data);
-          publications.data = publications.data.filter((publication) =>
+        .then((initPublications) => {
+          console.log(initPublications.data);
+          initPublications.data = initPublications.data.filter((publication) =>
             [cookies.account.user, ...contacts].includes(publication.username)
           );
+          initPublications.data.reverse();
           let newTags = [];
-          const newPublications = publications.data.map((publication) => {
+          const newPublications = initPublications.data.map((publication) => {
             for (let i = 0; i < publication.tags.length; i++) {
               const tag = publication.tags[i];
               newTags.push(tag);
@@ -143,7 +175,11 @@ function Home() {
                   </Card.Title>
 
                   <Card.Text>{publication.text}</Card.Text>
-                  <Button variant="outline-dark" size="sm">
+                  <Button
+                    variant="outline-dark"
+                    size="sm"
+                    onClick={() => translate(publication._id)}
+                  >
                     <svg
                       width="1em"
                       height="1em"
@@ -164,6 +200,7 @@ function Home() {
             );
           });
           setPublications(newPublications);
+          console.log("FLAG 2", publications);
           newTags = [...new Set(newTags)];
           const finalTags = newTags.map((temporal) => {
             return (
