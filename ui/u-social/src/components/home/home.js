@@ -19,8 +19,7 @@ function Home() {
   const [tags, setTags] = useState([]);
   const [newContacts, setNewContacts] = useState([]);
   const [friends, setFriends] = useState([]);
-
-  console.log(cookies.account);
+  const [publicationsData, setPublicationsData] = useState([]);
 
   function handlePublish(event) {
     toBase64(image)
@@ -33,9 +32,9 @@ function Home() {
             text: text,
           })
           .then((results) => getInitData())
-          .catch((error) => console.log(error));
+          .catch((error) => {});
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {});
     event.preventDefault();
   }
 
@@ -53,7 +52,6 @@ function Home() {
   }
 
   function follow(friend) {
-    console.log("FOLLOW", friend);
     axios
       .post("http://localhost:3000/friend", {
         username: cookies.account.user,
@@ -66,8 +64,10 @@ function Home() {
   }
 
   useEffect(() => {
-    getInitData();
-  }, []);
+    if (publications.length == 0 && newContacts == 0 && friends == 0) {
+      getInitData();
+    }
+  }, [publications, publicationsData, newContacts, friends]);
 
   function getInitData() {
     axios
@@ -123,17 +123,163 @@ function Home() {
         });
         setNewContacts(contacts);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {});
   }
-
-  useEffect(() => {
-    if (publications.length) {
-      console.log("FLAG", publications);
-    }
-  }, [publications]);
 
   function translate(id) {
     console.log("TRANSLATE", id);
+  }
+
+  function handleFilter(event) {
+    const newPublications = publicationsData.map((publication) => {
+      if (event.target.value === "Propias") {
+        if (publication.username === cookies.account.user) {
+          return (
+            <Card
+              className="mt-2"
+              style={{ width: "100%" }}
+              key={publication._id}
+            >
+              <Card.Img variant="top" src={publication.image} />
+              <Card.Body>
+                <Card.Subtitle className="font-weight-light">
+                  {publication.date}
+                </Card.Subtitle>
+                <Card.Title className="mt-1">
+                  <Image
+                    alt=""
+                    src={publication.avatar}
+                    width="30"
+                    height="30"
+                    roundedCircle
+                  />{" "}
+                  {publication.username}
+                </Card.Title>
+
+                <Card.Text>{publication.text}</Card.Text>
+                <Button
+                  variant="outline-dark"
+                  size="sm"
+                  onClick={() => translate(publication._id)}
+                >
+                  <svg
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    className="bi bi-globe"
+                    style={{ fill: "currentcolor" }}
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      style={{ fillRule: "evenodd" }}
+                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4H2.255a7.025 7.025 0 0 1 3.072-2.472 6.7 6.7 0 0 0-.597.933c-.247.464-.462.98-.64 1.539zm-.582 3.5h-2.49c.062-.89.291-1.733.656-2.5H3.82a13.652 13.652 0 0 0-.312 2.5zM4.847 5H7.5v2.5H4.51A12.5 12.5 0 0 1 4.846 5zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5H7.5V11H4.847a12.5 12.5 0 0 1-.338-2.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12H7.5v2.923c-.67-.204-1.335-.82-1.887-1.855A7.97 7.97 0 0 1 5.145 12zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11H1.674a6.958 6.958 0 0 1-.656-2.5h2.49c.03.877.138 1.718.312 2.5zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12h2.355a7.967 7.967 0 0 1-.468 1.068c-.552 1.035-1.218 1.65-1.887 1.855V12zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5h-2.49A13.65 13.65 0 0 0 12.18 5h2.146c.365.767.594 1.61.656 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4H8.5V1.077c.67.204 1.335.82 1.887 1.855.173.324.33.682.468 1.068z"
+                    />
+                  </svg>{" "}
+                  Translate
+                </Button>
+              </Card.Body>
+            </Card>
+          );
+        }
+      } else if (event.target.value === "Amigos") {
+        if (friends.includes(publication.username)) {
+          return (
+            <Card
+              className="mt-2"
+              style={{ width: "100%" }}
+              key={publication._id}
+            >
+              <Card.Img variant="top" src={publication.image} />
+              <Card.Body>
+                <Card.Subtitle className="font-weight-light">
+                  {publication.date}
+                </Card.Subtitle>
+                <Card.Title className="mt-1">
+                  <Image
+                    alt=""
+                    src={publication.avatar}
+                    width="30"
+                    height="30"
+                    roundedCircle
+                  />{" "}
+                  {publication.username}
+                </Card.Title>
+
+                <Card.Text>{publication.text}</Card.Text>
+                <Button
+                  variant="outline-dark"
+                  size="sm"
+                  onClick={() => translate(publication._id)}
+                >
+                  <svg
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    className="bi bi-globe"
+                    style={{ fill: "currentcolor" }}
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      style={{ fillRule: "evenodd" }}
+                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4H2.255a7.025 7.025 0 0 1 3.072-2.472 6.7 6.7 0 0 0-.597.933c-.247.464-.462.98-.64 1.539zm-.582 3.5h-2.49c.062-.89.291-1.733.656-2.5H3.82a13.652 13.652 0 0 0-.312 2.5zM4.847 5H7.5v2.5H4.51A12.5 12.5 0 0 1 4.846 5zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5H7.5V11H4.847a12.5 12.5 0 0 1-.338-2.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12H7.5v2.923c-.67-.204-1.335-.82-1.887-1.855A7.97 7.97 0 0 1 5.145 12zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11H1.674a6.958 6.958 0 0 1-.656-2.5h2.49c.03.877.138 1.718.312 2.5zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12h2.355a7.967 7.967 0 0 1-.468 1.068c-.552 1.035-1.218 1.65-1.887 1.855V12zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5h-2.49A13.65 13.65 0 0 0 12.18 5h2.146c.365.767.594 1.61.656 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4H8.5V1.077c.67.204 1.335.82 1.887 1.855.173.324.33.682.468 1.068z"
+                    />
+                  </svg>{" "}
+                  Translate
+                </Button>
+              </Card.Body>
+            </Card>
+          );
+        }
+      } else if (publication.tags.includes(event.target.value)) {
+        return (
+          <Card
+            className="mt-2"
+            style={{ width: "100%" }}
+            key={publication._id}
+          >
+            <Card.Img variant="top" src={publication.image} />
+            <Card.Body>
+              <Card.Subtitle className="font-weight-light">
+                {publication.date}
+              </Card.Subtitle>
+              <Card.Title className="mt-1">
+                <Image
+                  alt=""
+                  src={publication.avatar}
+                  width="30"
+                  height="30"
+                  roundedCircle
+                />{" "}
+                {publication.username}
+              </Card.Title>
+
+              <Card.Text>{publication.text}</Card.Text>
+              <Button
+                variant="outline-dark"
+                size="sm"
+                onClick={() => translate(publication._id)}
+              >
+                <svg
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  className="bi bi-globe"
+                  style={{ fill: "currentcolor" }}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    style={{ fillRule: "evenodd" }}
+                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4H2.255a7.025 7.025 0 0 1 3.072-2.472 6.7 6.7 0 0 0-.597.933c-.247.464-.462.98-.64 1.539zm-.582 3.5h-2.49c.062-.89.291-1.733.656-2.5H3.82a13.652 13.652 0 0 0-.312 2.5zM4.847 5H7.5v2.5H4.51A12.5 12.5 0 0 1 4.846 5zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5H7.5V11H4.847a12.5 12.5 0 0 1-.338-2.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12H7.5v2.923c-.67-.204-1.335-.82-1.887-1.855A7.97 7.97 0 0 1 5.145 12zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11H1.674a6.958 6.958 0 0 1-.656-2.5h2.49c.03.877.138 1.718.312 2.5zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12h2.355a7.967 7.967 0 0 1-.468 1.068c-.552 1.035-1.218 1.65-1.887 1.855V12zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5h-2.49A13.65 13.65 0 0 0 12.18 5h2.146c.365.767.594 1.61.656 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4H8.5V1.077c.67.204 1.335.82 1.887 1.855.173.324.33.682.468 1.068z"
+                  />
+                </svg>{" "}
+                Translate
+              </Button>
+            </Card.Body>
+          </Card>
+        );
+      }
+    });
+    setPublications(newPublications);
   }
 
   function getInitPublications(contacts) {
@@ -141,66 +287,67 @@ function Home() {
       axios
         .get("http://localhost:3000/publish")
         .then((initPublications) => {
-          console.log(initPublications.data);
           initPublications.data = initPublications.data.filter((publication) =>
             [cookies.account.user, ...contacts].includes(publication.username)
           );
           initPublications.data.reverse();
           let newTags = [];
+          setPublicationsData(initPublications.data);
           const newPublications = initPublications.data.map((publication) => {
             for (let i = 0; i < publication.tags.length; i++) {
               const tag = publication.tags[i];
               newTags.push(tag);
             }
-            return (
-              <Card
-                className="mt-2"
-                style={{ width: "100%" }}
-                key={publication._id}
-              >
-                <Card.Img variant="top" src={publication.image} />
-                <Card.Body>
-                  <Card.Subtitle className="font-weight-light">
-                    {publication.date}
-                  </Card.Subtitle>
-                  <Card.Title className="mt-1">
-                    <Image
-                      alt=""
-                      src={publication.avatar}
-                      width="30"
-                      height="30"
-                      roundedCircle
-                    />{" "}
-                    {publication.username}
-                  </Card.Title>
+            if (publication.username === cookies.account.user) {
+              return (
+                <Card
+                  className="mt-2"
+                  style={{ width: "100%" }}
+                  key={publication._id}
+                >
+                  <Card.Img variant="top" src={publication.image} />
+                  <Card.Body>
+                    <Card.Subtitle className="font-weight-light">
+                      {publication.date}
+                    </Card.Subtitle>
+                    <Card.Title className="mt-1">
+                      <Image
+                        alt=""
+                        src={publication.avatar}
+                        width="30"
+                        height="30"
+                        roundedCircle
+                      />{" "}
+                      {publication.username}
+                    </Card.Title>
 
-                  <Card.Text>{publication.text}</Card.Text>
-                  <Button
-                    variant="outline-dark"
-                    size="sm"
-                    onClick={() => translate(publication._id)}
-                  >
-                    <svg
-                      width="1em"
-                      height="1em"
-                      viewBox="0 0 16 16"
-                      className="bi bi-globe"
-                      style={{ fill: "currentcolor" }}
-                      xmlns="http://www.w3.org/2000/svg"
+                    <Card.Text>{publication.text}</Card.Text>
+                    <Button
+                      variant="outline-dark"
+                      size="sm"
+                      onClick={() => translate(publication._id)}
                     >
-                      <path
-                        style={{ fillRule: "evenodd" }}
-                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4H2.255a7.025 7.025 0 0 1 3.072-2.472 6.7 6.7 0 0 0-.597.933c-.247.464-.462.98-.64 1.539zm-.582 3.5h-2.49c.062-.89.291-1.733.656-2.5H3.82a13.652 13.652 0 0 0-.312 2.5zM4.847 5H7.5v2.5H4.51A12.5 12.5 0 0 1 4.846 5zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5H7.5V11H4.847a12.5 12.5 0 0 1-.338-2.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12H7.5v2.923c-.67-.204-1.335-.82-1.887-1.855A7.97 7.97 0 0 1 5.145 12zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11H1.674a6.958 6.958 0 0 1-.656-2.5h2.49c.03.877.138 1.718.312 2.5zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12h2.355a7.967 7.967 0 0 1-.468 1.068c-.552 1.035-1.218 1.65-1.887 1.855V12zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5h-2.49A13.65 13.65 0 0 0 12.18 5h2.146c.365.767.594 1.61.656 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4H8.5V1.077c.67.204 1.335.82 1.887 1.855.173.324.33.682.468 1.068z"
-                      />
-                    </svg>{" "}
-                    Translate
-                  </Button>
-                </Card.Body>
-              </Card>
-            );
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        className="bi bi-globe"
+                        style={{ fill: "currentcolor" }}
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          style={{ fillRule: "evenodd" }}
+                          d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4H2.255a7.025 7.025 0 0 1 3.072-2.472 6.7 6.7 0 0 0-.597.933c-.247.464-.462.98-.64 1.539zm-.582 3.5h-2.49c.062-.89.291-1.733.656-2.5H3.82a13.652 13.652 0 0 0-.312 2.5zM4.847 5H7.5v2.5H4.51A12.5 12.5 0 0 1 4.846 5zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5H7.5V11H4.847a12.5 12.5 0 0 1-.338-2.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12H7.5v2.923c-.67-.204-1.335-.82-1.887-1.855A7.97 7.97 0 0 1 5.145 12zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11H1.674a6.958 6.958 0 0 1-.656-2.5h2.49c.03.877.138 1.718.312 2.5zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12h2.355a7.967 7.967 0 0 1-.468 1.068c-.552 1.035-1.218 1.65-1.887 1.855V12zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5h-2.49A13.65 13.65 0 0 0 12.18 5h2.146c.365.767.594 1.61.656 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4H8.5V1.077c.67.204 1.335.82 1.887 1.855.173.324.33.682.468 1.068z"
+                        />
+                      </svg>{" "}
+                      Translate
+                    </Button>
+                  </Card.Body>
+                </Card>
+              );
+            }
           });
           setPublications(newPublications);
-          console.log("FLAG 2", publications);
           newTags = [...new Set(newTags)];
           const finalTags = newTags.map((temporal) => {
             return (
@@ -225,10 +372,6 @@ function Home() {
         })
         .catch((error) => reject(error));
     });
-  }
-
-  function handleFilter(event) {
-    console.log(event.target.value);
   }
 
   return (
