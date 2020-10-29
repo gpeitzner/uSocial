@@ -107,4 +107,14 @@ publish.getPublications = async (req, res) => {
   } catch (error) {}
 };
 
+publish.translate = async (req, res) => {
+  const { message } = req.body;
+  try {
+    const result = await translate(message);
+    res.json(result);
+  } catch (error) {
+    res.json(error);
+  }
+};
+
 module.exports = publish;
