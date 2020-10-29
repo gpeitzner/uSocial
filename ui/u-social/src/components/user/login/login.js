@@ -91,6 +91,11 @@ function Login() {
                 Entrar
               </Button>
             </form>
+            <div className="border my-4 pt-3">
+              <p className="text-center" style={{ fontSize: "0.9em" }}>
+                Nuevo en uSocial? <a href="/registrer">Crea una cuenta.</a>
+              </p>
+            </div>
           </Col>
         </Row>
       </Container>

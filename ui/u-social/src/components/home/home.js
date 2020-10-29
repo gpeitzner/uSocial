@@ -9,10 +9,11 @@ import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 function Home() {
   const logoPath = require("../../assets/red.png");
-  const [cookies, setCookie] = useCookies(["account"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["account"]);
   const [text, setText] = useState("");
   const [image, setImage] = useState("");
   const [publications, setPublications] = useState([]);
@@ -20,6 +21,7 @@ function Home() {
   const [newContacts, setNewContacts] = useState([]);
   const [friends, setFriends] = useState([]);
   const [publicationsData, setPublicationsData] = useState([]);
+  const [toLogin, setToLogin] = useState(false);
 
   function handlePublish(event) {
     toBase64(image)
@@ -64,8 +66,16 @@ function Home() {
   }
 
   useEffect(() => {
-    if (publications.length == 0 && newContacts == 0 && friends == 0) {
-      getInitData();
+    if (
+      publications.length === 0 &&
+      newContacts.length === 0 &&
+      friends.length === 0
+    ) {
+      if (!cookies.account) {
+        setToLogin(true);
+      } else {
+        getInitData();
+      }
     }
   }, [publications, publicationsData, newContacts, friends]);
 
@@ -278,6 +288,7 @@ function Home() {
           </Card>
         );
       }
+      return null;
     });
     setPublications(newPublications);
   }
@@ -346,6 +357,7 @@ function Home() {
                 </Card>
               );
             }
+            return null;
           });
           setPublications(newPublications);
           newTags = [...new Set(newTags)];
@@ -374,137 +386,152 @@ function Home() {
     });
   }
 
+  function exitSystem() {}
+
   return (
     <div>
-      <Navbar
-        className="justify-content-between"
-        bg="light"
-        variant="light"
-        sticky="top"
-      >
-        <Navbar.Brand href="#home">
-          <img
-            alt=""
-            src={logoPath}
-            width="30"
-            height="30"
-            className="d-inline-block align-top"
-          />
-          {"  "}
-          uSocial
-          <Button className="ml-4" variant="dark" size="sm">
-            <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 16 16"
-              className="bi bi-chat-dots-fill"
-              style={{ fill: "currentColor" }}
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                style={{ fillRule: "evenodd" }}
-                d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+      {toLogin ? <Redirect to="/" /> : null}
+      {cookies.account ? (
+        <div>
+          <Navbar
+            className="justify-content-between"
+            bg="light"
+            variant="light"
+            sticky="top"
+          >
+            <Navbar.Brand href="#home">
+              <img
+                alt=""
+                src={logoPath}
+                width="30"
+                height="30"
+                className="d-inline-block align-top"
               />
-            </svg>{" "}
-            Chat
-          </Button>
-        </Navbar.Brand>
-        <div className="d-flex">
-          <div className="bg-dark text-white rounded p-1">
-            <Image
-              alt=""
-              src={cookies.account.image}
-              width="30"
-              height="30"
-              roundedCircle
-            />{" "}
-            {cookies.account.name}
-          </div>
-          <Button className="ml-2" variant="danger" size="sm">
-            <svg
-              width="1em"
-              height="1em"
-              viewBox="0 0 16 16"
-              className="bi bi-x-circle-fill"
-              style={{ fill: "currentColor" }}
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                style={{ fillRule: "evenodd" }}
-                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"
-              />
-            </svg>{" "}
-            Salir
-          </Button>
-        </div>
-      </Navbar>
-      <Container className="my-4">
-        <Row>
-          <Col className="col-sm-12 col-md-12 col-lg-8">
-            <form className="border p-4" onSubmit={handlePublish}>
-              <input
-                type="text"
-                value={text}
-                onChange={(event) => setText(event.target.value)}
-                style={{ width: "100%" }}
-              ></input>
-              <input
-                className="mt-2"
-                type="file"
-                onChange={(event) => setImage(event.target.files[0])}
-                style={{ width: "100%" }}
-              ></input>
-              <Button
-                type="submit"
-                className="mt-3"
-                variant="dark"
-                style={{ width: "100%" }}
-              >
+              {"  "}
+              uSocial
+              <Button className="ml-4" variant="dark" size="sm">
                 <svg
                   width="1em"
                   height="1em"
                   viewBox="0 0 16 16"
-                  className="bi bi-plus-circle-fill"
+                  className="bi bi-chat-dots-fill"
                   style={{ fill: "currentColor" }}
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
                     style={{ fillRule: "evenodd" }}
-                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"
+                    d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
                   />
                 </svg>{" "}
-                Publicar
+                Chat
               </Button>
-            </form>
-            <div className="d-flex justify-content-center my-4">
-              <h6>Filtrar por</h6>
-              <select className="ml-2" onChange={handleFilter}>
-                {tags}
-              </select>
-            </div>
-            {publications}
-          </Col>
-          <Col className="col-sm-12 col-md-12 col-lg-4">
-            <h3>
-              <svg
-                width="1em"
-                height="1em"
-                viewBox="0 0 16 16"
-                className="bi bi-person-plus-fill"
-                style={{ fill: "currentcolor" }}
-                xmlns="http://www.w3.org/2000/svg"
+            </Navbar.Brand>
+            <div className="d-flex">
+              <div className="bg-dark text-white rounded p-1">
+                <Image
+                  alt=""
+                  src={cookies.account.image}
+                  width="30"
+                  height="30"
+                  roundedCircle
+                />{" "}
+                {cookies.account.name}
+              </div>
+              <Button
+                className="ml-2"
+                variant="danger"
+                size="sm"
+                onClick={() => {
+                  removeCookie("account");
+                  setToLogin(true);
+                }}
               >
-                <path
-                  style={{ fillRule: "evenodd" }}
-                  d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7.5-3a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"
-                />
-              </svg>{" "}
-              Conecta
-            </h3>
-            <ListGroup>{newContacts}</ListGroup>
-          </Col>
-        </Row>
-      </Container>
+                <svg
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  className="bi bi-x-circle-fill"
+                  style={{ fill: "currentColor" }}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    style={{ fillRule: "evenodd" }}
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"
+                  />
+                </svg>{" "}
+                Salir
+              </Button>
+            </div>
+          </Navbar>
+          <Container className="my-4">
+            <Row>
+              <Col className="col-sm-12 col-md-12 col-lg-8">
+                <form className="border p-4" onSubmit={handlePublish}>
+                  <input
+                    type="text"
+                    value={text}
+                    onChange={(event) => setText(event.target.value)}
+                    style={{ width: "100%" }}
+                  ></input>
+                  <input
+                    className="mt-2"
+                    type="file"
+                    onChange={(event) => setImage(event.target.files[0])}
+                    style={{ width: "100%" }}
+                  ></input>
+                  <Button
+                    type="submit"
+                    className="mt-3"
+                    variant="dark"
+                    style={{ width: "100%" }}
+                  >
+                    <svg
+                      width="1em"
+                      height="1em"
+                      viewBox="0 0 16 16"
+                      className="bi bi-plus-circle-fill"
+                      style={{ fill: "currentColor" }}
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        style={{ fillRule: "evenodd" }}
+                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"
+                      />
+                    </svg>{" "}
+                    Publicar
+                  </Button>
+                </form>
+                <div className="d-flex justify-content-center my-4">
+                  <h6>Filtrar por</h6>
+                  <select className="ml-2" onChange={handleFilter}>
+                    {tags}
+                  </select>
+                </div>
+                {publications}
+              </Col>
+              <Col className="col-sm-12 col-md-12 col-lg-4">
+                <h3>
+                  <svg
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    className="bi bi-person-plus-fill"
+                    style={{ fill: "currentcolor" }}
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      style={{ fillRule: "evenodd" }}
+                      d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7.5-3a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"
+                    />
+                  </svg>{" "}
+                  Conecta
+                </h3>
+                <ListGroup>{newContacts}</ListGroup>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      ) : null}
     </div>
   );
 }
