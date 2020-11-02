@@ -9,7 +9,7 @@ import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useCookies } from "react-cookie";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory} from "react-router-dom";
 
 function Home() {
   const logoPath = require("../../assets/red.png");
@@ -23,6 +23,11 @@ function Home() {
   const [publicationsData, setPublicationsData] = useState([]);
   const [toLogin, setToLogin] = useState(false);
   const [currentFilter, setCurrentFilter] = useState("Propias");
+  let history = useHistory();
+  const RedonSubmit = () => {
+    console.log("redirect")
+    history.push('/chat');
+  }
 
   function handlePublish(event) {
     toBase64(image)
@@ -35,9 +40,9 @@ function Home() {
             text: text,
           })
           .then((results) => getInitData())
-          .catch((error) => {});
+          .catch((error) => { });
       })
-      .catch((error) => {});
+      .catch((error) => { });
     event.preventDefault();
   }
 
@@ -63,7 +68,7 @@ function Home() {
       .then(() => {
         getInitData();
       })
-      .catch(() => {});
+      .catch(() => { });
   }
 
   useEffect(() => {
@@ -87,8 +92,8 @@ function Home() {
         const finalFriends = knows.data.map((friend) => friend.user);
         setFriends(finalFriends);
         getInitPublications(finalFriends)
-          .then(() => {})
-          .catch(() => {});
+          .then(() => { })
+          .catch(() => { });
         return axios.get(
           "http://localhost:3000/friend/unknows/" + cookies.account.user
         );
@@ -134,7 +139,7 @@ function Home() {
         });
         setNewContacts(contacts);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   async function translate(id) {
@@ -574,7 +579,7 @@ function Home() {
               />
               {"  "}
               uSocial
-              <Button className="ml-4" variant="dark" size="sm">
+              <Button className="ml-4" variant="dark" size="sm" onClick={RedonSubmit}>
                 <svg
                   width="1em"
                   height="1em"

@@ -16,6 +16,7 @@ import Messages from '../messages/messages'
 import Users from '../users/users';
 import Graph from '../graphics/graph';
 import axios from 'axios'
+import { useCookies } from "react-cookie";
 
 import { Line } from 'react-chartjs-2';
 
@@ -38,6 +39,8 @@ const Chat = ({ location }) => {
     const [step, setStep] = useState(0)
     const [users, setUsers] = useState([]);
     const [initChat, setInitChat] = useState(true);
+    
+    const [cookies, setCookie, removeCookie] = useCookies(["account"]);
     useEffect(() => {
         //console.log(location)
         if (location.search != "") {
@@ -68,7 +71,8 @@ const Chat = ({ location }) => {
 
     useEffect(async () => {
         let res = ''
-        res = await fetch(endPoint);
+        res = await fetch(`${endPoint}/friend/knows/${cookies.account.user}`);
+        //res = await fetch(endPoint);
         res
             .json()
             .then((res) => {
