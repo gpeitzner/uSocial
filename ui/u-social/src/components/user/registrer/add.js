@@ -10,9 +10,12 @@ import {
     Toast
 } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 const logoPath = require("../../../assets/red.png");
 const AddUser = () => {
+    
+    let history = useHistory();
     const [show, setShow] = useState(false);
     const [image, setImage] = useState("");
     const [datos, setDatos] = useState({
@@ -57,6 +60,7 @@ const AddUser = () => {
         })
         setShow(true)
         document.getElementById("formulario").reset();
+        history.push('/');
     }
     return (
         <Container fluid="md" id="containerReg">
