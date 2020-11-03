@@ -7,9 +7,9 @@ import Button from "react-bootstrap/Button";
 import Navbar from "react-bootstrap/Navbar";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
-import { useCookies } from "react-cookie";
+import { Cookies, useCookies } from "react-cookie";
 import axios from "axios";
-import { Redirect, useHistory} from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
 function Home() {
   const logoPath = require("../../assets/red.png");
@@ -23,6 +23,12 @@ function Home() {
   const [publicationsData, setPublicationsData] = useState([]);
   const [toLogin, setToLogin] = useState(false);
   const [currentFilter, setCurrentFilter] = useState("Propias");
+  let pathProfile = ''
+  try {
+    pathProfile = '/user/' + cookies.account._id
+  }catch(e){
+    console.log('pinches hooks')
+  }
   let history = useHistory();
   const RedonSubmit = () => {
     console.log("redirect")
@@ -598,14 +604,16 @@ function Home() {
             </Navbar.Brand>
             <div className="d-flex">
               <div className="bg-dark text-white rounded p-1">
-                <Image
-                  alt=""
-                  src={cookies.account.image}
-                  width="30"
-                  height="30"
-                  roundedCircle
-                />{" "}
-                {cookies.account.name}
+                <a href={pathProfile}>
+                  <Image
+                    alt=""
+                    src={cookies.account.image}
+                    width="30"
+                    height="30"
+                    roundedCircle
+                  />{" "}
+                  {cookies.account.name}
+                </a>
               </div>
               <Button
                 className="ml-2"
@@ -701,8 +709,9 @@ function Home() {
             </Row>
           </Container>
         </div>
-      ) : null}
-    </div>
+      ) : null
+      }
+    </div >
   );
 }
 
