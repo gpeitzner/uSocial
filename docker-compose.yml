@@ -1,0 +1,10 @@
+version: "3"
+services:
+    server:
+        build: ./api
+        ports: 
+            - "3000:3000"
+    client:
+        build: ./ui/u-social
+        ports: 
+            - "80:80"
