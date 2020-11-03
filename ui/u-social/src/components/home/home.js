@@ -39,7 +39,7 @@ function Home() {
     toBase64(image)
       .then((image64) => {
         axios
-          .post("server0/publish", {
+          .post("server/publish", {
             username: cookies.account.user,
             avatar: cookies.account.image,
             image64: image64.substring(22, image64.length),
@@ -67,7 +67,7 @@ function Home() {
 
   function follow(friend) {
     axios
-      .post("server0/friend", {
+      .post("server/friend", {
         username: cookies.account.user,
         friend: friend,
       })
@@ -93,7 +93,7 @@ function Home() {
 
   function getInitData() {
     axios
-      .get("server0/friend/knows/" + cookies.account.user)
+      .get("server/friend/knows/" + cookies.account.user)
       .then((knows) => {
         const finalFriends = knows.data.map((friend) => friend.user);
         setFriends(finalFriends);
@@ -101,7 +101,7 @@ function Home() {
           .then(() => { })
           .catch(() => { });
         return axios.get(
-          "server0/friend/unknows/" + cookies.account.user
+          "server/friend/unknows/" + cookies.account.user
         );
       })
       .then((unknows) => {
@@ -154,7 +154,7 @@ function Home() {
       try {
         if (publication._id === id) {
           const translated = await axios.post(
-            "server0/publish/translate",
+            "server/publish/translate",
             {
               message: publication.text,
             }
@@ -474,7 +474,7 @@ function Home() {
   function getInitPublications(contacts) {
     return new Promise((resolve, reject) => {
       axios
-        .get("server0/publish")
+        .get("server/publish")
         .then((initPublications) => {
           initPublications.data = initPublications.data.filter((publication) =>
             [cookies.account.user, ...contacts].includes(publication.username)

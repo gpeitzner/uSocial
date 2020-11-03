@@ -46,7 +46,7 @@ const AddUser = () => {
 
     const enviarDatos = (event) => {
         event.preventDefault()     //evita que se recargue la pagina
-        const url = 'server0/user/registrer';
+        const url = 'server/user/registrer';
         const user = {
             name: datos.name,
             user: datos.user,

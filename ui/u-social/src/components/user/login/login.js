@@ -16,7 +16,7 @@ function Login() {
   const logoPath = require("../../../assets/red.png");
   const [cookies, setCookie] = useCookies(["account"]);
   function handleSubmit(event) {
-    fetch("server0/user/login", {
+    fetch("server/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
