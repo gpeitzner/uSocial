@@ -21,7 +21,7 @@ import { useCookies } from "react-cookie";
 import { Line } from 'react-chartjs-2';
 
 let socket;
-const endPoint = 'http://localhost:3000'
+const endPoint = 'http://18.223.239.112:3000'
 const pathImage = require("../../../assets/chat.png");
 
 
