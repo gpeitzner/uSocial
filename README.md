@@ -1,4 +1,5 @@
 # Arquitectura Implementada
+>> La arquitectura implementada consta en 2 maquinas ec2 la cual 1 contendra el servidor y la aplicacion web y la otra contendra la base de datos 
 
 ![texto alternativo](/imagenes/arquitectura.png)
 
@@ -44,3 +45,14 @@
 >> "memo" : el cual tendra permisos de administrador y control total
 >>> ![texto alternativo](/imagenes/memoIam.png) 
 
+> # Grupo de Usuario
+
+>> ![texto alternativo](/imagenes/grupoU.png) 
+
+> # Bucket de S3
+
+>> ![texto alternativo](/imagenes/buckets.png) 
+
+> # Lamnda
+
+>> ![texto alternativo](/imagenes/lambda.png) 
