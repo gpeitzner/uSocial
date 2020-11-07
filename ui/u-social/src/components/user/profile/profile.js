@@ -14,8 +14,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios'
 
 const ProfileUser = () => {
-    const urlUser = 'http://18.223.239.112:3000/user/'
-    const urlEdit = 'http://18.223.239.112:3000/user/update/'
+    const urlUser = 'http://3.139.70.184:3000/user/'
+    const urlEdit = 'http://3.139.70.184:3000/user/update/'
     const [nameBefore, setnameBefore] = useState("");
     const { _id } = useParams();
     const [show, setShow] = useState(false);
@@ -32,7 +32,7 @@ const ProfileUser = () => {
     //no use axios para esta peticion porque se quedaba haciendo peticiones, es mejor usar un unico effect y cargue la data axios funciona mejor para post, put y delete
     async function getUser() {
         let res = ''
-        res = await fetch(`http://18.223.239.112:3000/user/${_id}`);
+        res = await fetch(`http://3.139.70.184:3000/user/${_id}`);
         res
             .json()
             .then((res) => {
